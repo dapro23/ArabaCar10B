@@ -100,7 +100,7 @@
             </div>
         </header>
         <section id="form-box">
-            <b>A continuacion saldran todos los viajes que tienes pendientes de hacer y las personas que se han apuntado a esos viajes</b>
+            <b>Estos son todos los viajes que tienes pendientes de hacer y las personas que se han apuntado a esos viajes</b>
         </section>
 
 

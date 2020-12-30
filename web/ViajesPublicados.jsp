@@ -29,7 +29,7 @@
         ArrayList<Viaje> viajesPasados = new ArrayList<>();
         ArrayList<Viaje> viajesFuturos = new ArrayList<>();
 
-        String mensaje = "La fecha actual es: " + LocalDate.now();
+        String mensaje = "Fecha actual: " + DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now());
 
         try {
             Connection conn = BD.getConexion();

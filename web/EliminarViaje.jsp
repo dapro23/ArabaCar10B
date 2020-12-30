@@ -112,8 +112,7 @@
                                 String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
                                 double precio = v.getPrecio();
                                 String boton = "<form action='EliminarViaje' onsubmit='{return checkIt(" + id + ");}'>"
-                                        + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "'>Eliminar</Button>"
-                                        + "<label for='botondetalles'> id: " + id + "</label> "
+                                        + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "'>Eliminar</Button>"                                        
                                         + "</form>";
                     %>
 
