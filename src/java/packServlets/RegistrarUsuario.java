@@ -70,6 +70,7 @@ public class RegistrarUsuario extends HttpServlet {
         if (existeUsuario(email)) {
 
             System.out.println("YA EXISTE!!! el usuario");
+            request.setAttribute("Aviso", "Ya existe un usuario con los mismos datos");
 
         } else {
 
@@ -114,8 +115,10 @@ public class RegistrarUsuario extends HttpServlet {
                 Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            request.getRequestDispatcher("loginRegister.jsp").forward(request, response);
+            
         }
+        
+        request.getRequestDispatcher("loginRegister.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
