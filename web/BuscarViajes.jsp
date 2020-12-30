@@ -14,23 +14,16 @@
 <html>
 
     <%
-
         String avisoReserva;
-
         if (request.getSession().getAttribute("email") != null) {
-
             out.println("<script>");
             out.println("window.onload = function (){    limpiar();};function limpiar() {    $('a').remove('#4'); }");
             out.println("</script>");
-
         }
-
-
     %>  
 
     <script>
         function checkIt(id) {
-
             if (confirm("¿Deseas apuntarte al viaje?" + " con id: " + id)) {
                 return true;
             } else {
@@ -38,7 +31,7 @@
             }
         }
     </script>
-
+    
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
@@ -46,11 +39,7 @@
         <title>ArabaCar | Login</title>
         <link  rel="icon"   href="img/favicon.png" type="image/png" />
         <link rel="stylesheet" href="css/style.css">
-
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-
-
-
     </head>
     <body>
         <header>
@@ -89,7 +78,6 @@
                         <option value="Vitoria">Vitoria - Gasteiz</option>
                     </select>
                 </div>
-
                 <div class ="Aviso">
                     <%                        String aviso = (String) request.getAttribute("Aviso");
                         if (aviso == null)
@@ -97,18 +85,15 @@
                     %>
                     <label name="Aviso" style="color:#e8491d;"> <%=aviso%> </label>
                 </div>
-
                 <div class="formContent">
                     <%
                         Calendar fechaC = new GregorianCalendar();
-
                         int año = fechaC.get(Calendar.YEAR);
                         int mes = fechaC.get(Calendar.MONTH);
                         int dia = fechaC.get(Calendar.DAY_OF_MONTH);
                         mes++;
                         String fechaActual = año + "-" + mes + "-" + dia;
                         System.err.println(fechaActual);
-
                         String fechaForm = "<label for='Fecha'> Fecha </label>"
                                 + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='2021-12-31' required>";
                     %>
@@ -125,19 +110,14 @@
                     %>
                     <label name="AvisoFecha" style="color:#e8491d"> <%=avisoFecha%> </label>
                 </div>
-
                 <button class="button" type='submit' id='enviar' >Buscar</button>
             </form>
         </section>
-
-
         <section id="dataWrapper" >
             <div id="elements">
-
                 <table >
                     <caption>Viajes Seleccionados</caption>
                     <thead>
-
                         <%
                             String cabecera;
 
@@ -157,19 +137,15 @@
 
 
                         %>                     
-
-
                         <tr><%=cabecera%></tr>
                     </thead>
-
                     <tbody id="elementsList">   </tbody>
                     <%
                         ArrayList<Viaje> viajes = (ArrayList<Viaje>) request.getAttribute("viajes");
                         if (viajes == null) {
                             //request.setAttribute("avisoReserva", "No hay viajes para mostrar!");
-                        } else {
-
-                            //Esta logueado el usuario*****************************
+                            
+                        } else {//Esta logueado el usuario*****************************                            
                             if (request.getSession().getAttribute("email") != null) {
 
                                 for (Viaje v : viajes) {
@@ -189,7 +165,6 @@
                                             + "<label for='botondetalles'> id: " + id + "</label> "
                                             + "</form>";
                     %>
-
                     <tr>
                         <td><%=nombre%></td>
                         <td><%=email%></td>
@@ -199,13 +174,9 @@
                         <td><%=precio%></td>
                         <td><%=boton%></td>                
                     </tr>     
-
                     <%
-                        }
-
-                        //NO esta en el sistema
-                    } else {
-
+                        }                        
+                    } else {//NO esta en el sistema
                         for (Viaje v : viajes) {
 
                             String id = v.getConductor();
@@ -223,7 +194,6 @@
                                     + "<label for='botondetalles'> id: " + id + "</label> "
                                     + "</form>";
                     %>
-
                     <tr>
                         <td><%=origen%></td>
                         <td><%=destino%></td>
@@ -231,30 +201,20 @@
                         <td><%=precio%></td>
                         <td><%=boton%></td>                
                     </tr>     
-
                     <%
                                 }
-
                             }
-
                         }
                     %>
-
                     </tbody>
                 </table>
-
             </div>
-
             <%
                 avisoReserva = (String) request.getAttribute("avisoReserva");
-
                 if (avisoReserva == null)
                     avisoReserva = "";
             %>
             <label name="avisoReserva" style="color:#e8491d;"> <%=avisoReserva%> </label>
-
         </section> 
-
-
     </body>
 </html>

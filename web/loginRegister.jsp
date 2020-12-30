@@ -66,7 +66,7 @@
 
                 <div class="formContent">
                     <label for="Dni"> DNI </label>
-                    <input type="text" placeholder= "DNI" id="dni" name = "dni" required>
+                    <input type="text" placeholder= "DNI" id="dni" name = "dni" pattern="[2-9]{1}[0-9]{7}[a-zA-Z]{1}" required>
                 </div>
                 <p id='resultdni' style="color: red">  </p>
 

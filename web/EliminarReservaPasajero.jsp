@@ -113,7 +113,8 @@
                     String idviaje = v.getConductor();
                     String origen = v.getOrigen();
                     String destino = v.getDestino();
-                    LocalDateTime fechaC = v.getFecha();
+                    String fechaC = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                    //LocalDateTime fechaC = v.getFecha();
                     double precio = v.getPrecio();
         %>
         <section id="dataWrapper" >
@@ -122,16 +123,13 @@
 
                     <tbody id="elementsList"></tbody>
 
-                    <tr>
-                        <th>ID Viaje</th>
+                    <tr>                        
                         <th>Origen</th>
                         <th>Destino</th>
                         <th>Fecha </th>                          
                         <th>Precio </th>
-
                     </tr>
-                    <tr>
-                        <td><%=idviaje%></td>
+                    <tr>                       
                         <td><%=origen%></td>
                         <td><%=destino%></td>
                         <td><%=fechaC%></td>                    

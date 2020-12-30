@@ -153,13 +153,13 @@
                     <caption>Viajes Pasados</caption>
                     <thead>
                         <tr>
-                            <th>Fecha de la Reserva</th>
+                            <th>Fecha Reserva</th>
                             <th>Conductor</th>
                             <th>Email</th>                            
                             <th>Telefono</th>
                             <th>Origen</th>
                             <th>Destino</th>
-                            <th>Fecha del viaje</th>                          
+                            <th>Fecha viaje</th>                          
                             <th>Precio </th>
 
                         </tr>
