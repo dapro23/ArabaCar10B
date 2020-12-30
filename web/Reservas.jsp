@@ -4,6 +4,7 @@
     Author     : dramo
 --%>
 
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.sql.SQLException"%>
@@ -175,8 +176,10 @@
                                 String telefonoc = v.getConductor();
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
-                                LocalDateTime fecha = v.getFecha();
-                                LocalDateTime fecha2 = v.getFecha2();
+                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                //LocalDateTime fecha = v.getFecha();
+                                String fecha2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha2());
+                                //LocalDateTime fecha2 = v.getFecha2();
                                 double precio = v.getPrecio();
                     %>
 
@@ -235,8 +238,12 @@
                                 String telefonoc = v.getConductor();
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
-                                LocalDateTime fecha = v.getFecha();
-                                LocalDateTime fecha2 = v.getFecha2();
+                                //LocalDateTime fecha = v.getFecha();
+                                //LocalDateTime fecha2 = v.getFecha2();
+                                
+                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                String fecha2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha2());
+                                
                                 double precio = v.getPrecio();
                     %>
 

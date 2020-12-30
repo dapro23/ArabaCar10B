@@ -4,6 +4,7 @@
     Author     : dramo
 --%>
 
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.sql.Connection"%>
@@ -126,7 +127,8 @@
                                 String conductor = v.getConductor();
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
-                                LocalDateTime fecha = v.getFecha();
+                                //LocalDateTime fecha = v.getFecha();
+                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
                                 double precio = v.getPrecio();
                                 String boton = "<form action='EliminarReserva' onsubmit='{return checkIt("+ idViaje +");}'>"
                                         + "<Button id = 'botondetalles' name = 'idviaje' value='" + idViaje + "' action='BuscarViajes'>Eliminar</Button>"                                        

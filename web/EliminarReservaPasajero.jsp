@@ -4,6 +4,7 @@
     Author     : dramo
 --%>
 
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.sql.SQLException"%>
@@ -174,7 +175,9 @@
                         for (Viaje r : reservas) {
 
                             String emailP = r.getId();
-                            LocalDateTime fechaR = r.getFecha();
+                            //LocalDateTime fechaR = r.getFecha();
+                            String fechaR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                            
                             String boton = "<form action='EliminarReservaPasajero' onsubmit='{return checkIt("+idviaje+");}'>"
                                     + "<Button id = 'botondetalles' name = 'botondetalles'>Eliminar</Button>"
                                     + "<input id='idviaje' name='idviaje' type='hidden' value='" + idviaje + "'></input>"

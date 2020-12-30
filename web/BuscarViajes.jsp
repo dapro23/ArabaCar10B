@@ -1,4 +1,5 @@
 
+<%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.GregorianCalendar"%>
 <%@page import="java.util.Calendar"%>
@@ -30,7 +31,7 @@
     <script>
         function checkIt(id) {
 
-            if (confirm("¿Deseas apuntarte al viaje?" + " con id: "+ id)) {
+            if (confirm("¿Deseas apuntarte al viaje?" + " con id: " + id)) {
                 return true;
             } else {
                 return false;
@@ -139,7 +140,7 @@
 
                         <%
                             String cabecera;
-                            
+
                             if (request.getSession().getAttribute("email") != null) {
                                 cabecera = "<th>Nombre</th>"
                                         + "<th>Email</th>"
@@ -164,7 +165,7 @@
                     <tbody id="elementsList">   </tbody>
                     <%
                         ArrayList<Viaje> viajes = (ArrayList<Viaje>) request.getAttribute("viajes");
-                        if (viajes == null) {                            
+                        if (viajes == null) {
                             //request.setAttribute("avisoReserva", "No hay viajes para mostrar!");
                         } else {
 
@@ -178,7 +179,8 @@
                                     String id = v.getId();
                                     String origen = v.getOrigen();
                                     String destino = v.getDestino();
-                                    String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(v.getFecha());
+                                    String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                    //LocalDateTime fecha = v.getFecha();
                                     //Timestamp fecha = v.getFecha();
 
                                     double precio = v.getPrecio();
@@ -209,8 +211,11 @@
                             String id = v.getConductor();
                             String origen = v.getOrigen();
                             String destino = v.getDestino();
-                            LocalDateTime fecha = v.getFecha();
+                            //LocalDateTime fecha = v.getFecha();
                             //Timestamp fecha = v.getFecha();
+
+                            //System.out.println(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(v.getFecha()) + " holaa");
+                            String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
 
                             double precio = v.getPrecio();
                             String boton = "<form action='RealizarReserva'>"
