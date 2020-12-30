@@ -77,12 +77,10 @@ public class Login extends HttpServlet {
                     response.sendRedirect("index.jsp");
                 }
             }
-            if (existe == true) {
-                
+            if (existe == true) {                
                 request.setAttribute("Aviso", "Informacion de Login Incorrecta");
                 RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
-                rd.include(request, response);
-                
+                rd.include(request, response);                
             }
 
             rs.close();
