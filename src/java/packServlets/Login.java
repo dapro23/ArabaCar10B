@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +22,37 @@ import javax.servlet.http.HttpSession;
 import packUtilidades.BD;
 
 public class Login extends HttpServlet {
+
+    private Connection conn;
+
+    private int existeUsuario(String email) {
+
+        int num = 0;
+
+        try {
+
+            Statement stmt = conn.createStatement();
+
+            //No deja publicar un viaje si ya existe un viaje ese mismo dia en el rango de la hora determinado
+            String query = "select * from usuario where email = '" + email + "';";
+
+            ResultSet rs2 = stmt.executeQuery(query);
+
+            System.out.println(query);
+
+            //if ( rs.getRow() == 1 )
+            if (rs2.next()) {
+                num = 1;
+                System.out.println("ENCONTRADO TRUE");
+            }
+
+        } catch (SQLException e) {
+            num = -1;
+            e.printStackTrace();
+        }
+
+        return num;
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,7 +67,7 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
 
         //**********************************
-        Connection conn = BD.getConexion();
+        conn = BD.getConexion();
         Statement st; //<--- sentencia de SQL 
         ResultSet rs; //<--- el resultado de la sentencia
 
@@ -45,48 +78,60 @@ public class Login extends HttpServlet {
         System.out.println("El correo del formulario: " + correo);
         System.out.println("La contraseña del formulario: " + contra);
 
-        try {
-            st = conn.createStatement();
-            rs = st.executeQuery("select email,password,coche from usuario");
+        if (existeUsuario(correo) == 1) {
 
-            boolean existe = true;
+            try {
+                st = conn.createStatement();
+                rs = st.executeQuery("select email, password, coche from usuario");
 
-            while (rs.next()) {
+                while (rs.next()) {
 
-                String email = rs.getString("email");
-                String contraa = rs.getString("password");
+                    String email = rs.getString("email");
+                    String password = rs.getString("password");
 
-                if (correo.equals(email) && contra.equals(contraa)) {
+                    if (correo.equals(email)) {
 
-                    existe = false;
+                        if (contra.equals(password)) {
 
-                    System.out.println("Estas dentro de la BD");
+                            System.out.println("Estas dentro de la BD");
 
-                    HttpSession s = request.getSession();
+                            HttpSession s = request.getSession();
 
-                    s.setAttribute("email", email);
-                    s.setAttribute("password", contra);
+                            s.setAttribute("email", email);
+                            s.setAttribute("password", password);
 
-                    String coche = rs.getString("coche"); //<-- recupera de la BD el campo coche
-                    if (coche != null) {
-                        s.setAttribute("coche", coche);
+                            String coche = rs.getString("coche");
+                            if (coche != null) {
+                                s.setAttribute("coche", coche);
+                            }
+
+                            response.sendRedirect("index.jsp");
+                            break;
+                        } else {
+
+                            //El email no existe
+                            request.setAttribute("Aviso", "La clave es incorrecta");
+                            RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+                            rd.include(request, response);
+                            break;
+
+                        }
+
                     }
 
-                    //se ven los datos en la direccion
-                    //request.getRequestDispatcher("indexlogueado.html").forward(request, response);
-                    response.sendRedirect("index.jsp");
                 }
-            }
-            if (existe == true) {                
-                request.setAttribute("Aviso", "Informacion de Login Incorrecta");
-                RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
-                rd.include(request, response);                
+
+                rs.close();
+                st.close();
+            } catch (SQLException ex) {
+                System.out.println(ex);
             }
 
-            rs.close();
-            st.close();
-        } catch (SQLException ex) {
-            System.out.println(ex);
+        } else {
+            //El email no existe
+            request.setAttribute("Aviso", "El email no esta registrado");
+            RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+            rd.include(request, response);
         }
 
     }
