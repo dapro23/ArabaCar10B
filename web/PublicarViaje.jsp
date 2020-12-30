@@ -33,6 +33,16 @@
         </header>
         <section id="form-box">
             <b>Introduce la informacion del viaje</b>
+            <div class ="Aviso">
+                <%
+                    String usuario = (String) request.getAttribute("Aviso");
+                    if (usuario == null) {
+                        usuario = "";
+                    }
+
+                %>
+                <label name="AvisoFecha" style="color:#e8491d"> <%=usuario%> </label>
+            </div>
             <form id="myform" action="PublicarViaje">
                 <div class="formContent">
                     <label for="Origen"> Origen </label>
@@ -81,6 +91,9 @@
                                 el.value = parseFloat(el.value).toFixed(2);
                             })(this)">
                 </div>
+
+
+
                 <div class="formContent">
                     <button class="button" type='submit' id="boton">Publicar</button>
                 </div>

@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
@@ -26,54 +29,55 @@ import packUtilidades.BD;
  */
 public class PublicarViaje extends HttpServlet {
 
-    private Connection conn;   
+    private Connection conn;
     private PreparedStatement pst;
-    private PreparedStatement pst2;
-    private ResultSet rs;
+    //private PreparedStatement pst2;
+    //private ResultSet rs;
     private ResultSet rs2;
-    
+
     @Override
     public void init(ServletConfig config) throws ServletException {
-        
+
         super.init(config); //To change body of generated methods, choose Tools | Templates.
 
         conn = BD.getConexion();
     }
-    
-    private boolean existeViaje(String email, String origen, String destino, String fecha) {
-        
-        boolean enc = false;
-        
+
+    private int existeViaje(String email, String origen, String destino, LocalDateTime fecha) {
+
+        int num = 0;
+
         try {
+
+            //Statement st = conn.createStatement();
+
+            Statement stmt = conn.createStatement();
             
-            String query = "SELECT * FROM viaje WHERE email = ? AND origen = ? AND destino = ? AND fecha = ?;";
-          
-          
-            pst2 = conn.prepareStatement(query);
 
-            pst2.setString(1, email);
+            String fecha2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH").format(fecha);
+            
+            //No deja publicar un viaje si ya existe un viaje ese mismo dia en el rango de la hora determinado
+            String query = "SELECT * FROM viaje WHERE email = '"+  email +"' AND origen = '"+origen+"' AND destino = '"+destino+"' "
+                    + "AND fecha LIKE '"+fecha2+":%'";
 
-            pst2.setString(2, origen);
-
-            pst2.setString(3, destino);
-
-            pst2.setString(4, fecha);                     
-           
-            rs2 = pst2.executeQuery(query);
+            ResultSet rs2 = stmt.executeQuery(query);
+                      
+            System.out.println(query);            
 
             //if ( rs.getRow() == 1 )
             if (rs2.next()) {
-                enc = true;
+                num = 1;
                 System.out.println("ENCONTRADO TRUE");
             }
 
         } catch (SQLException e) {
+            num = -1;
             e.printStackTrace();
         }
-        
-        return enc;
+
+        return num;
     }
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -85,57 +89,70 @@ public class PublicarViaje extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession s = request.getSession();       
+
+        HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
-        
+
         String origen = request.getParameter("origen");
         String destino = request.getParameter("destino");
-        
+
         String fecha = request.getParameter("fecha");
-        String hora = request.getParameter("hora");        
-        
-        fecha = fecha + " " + hora + ":00";
-        
+        String hora = request.getParameter("hora");
+
+        //fecha = fecha + " " + hora + ":00";
+        fecha = fecha + " " + hora;
+
+        //fecha = fecha.
+        //String str = "2016-03-04 11:30";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(fecha, formatter);
+
         String precio = request.getParameter("precio");
-        
-        System.out.println("Datos del Form: " + email + " "+ fecha + " " + precio + " " + origen + " " + destino);       
-        
-        
-        if (false /*existeViaje(email, origen, destino, fecha)*/) {
+
+        System.out.println("Datos del Form: " + email + " " + fecha + " " + precio + " " + origen + " " + destino);
+
+        int a = existeViaje(email, origen, destino, dateTime);
+
+        if (a == 1) {
 
             System.out.println("YA EXISTE!!! el viaje");
+            request.setAttribute("Aviso", "No puedes publicar ese viaje");
+            request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
 
-        } else {
+        } else if (a == -1) {
+
+            System.out.println("Error SQL en la sentencia!!!");
+            request.setAttribute("Aviso", "Error en la comprobacion de duplicidad");
+            request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
+
+        } else if (a == 0) {
 
             try {
-                
+
                 String query = "INSERT INTO viaje (`email`,`origen`,`destino`,`fecha`,`precio`) VALUES (?, ?, ?, ?, ?);";
 
                 pst = conn.prepareStatement(query);
 
                 pst.setString(1, email);
-                
+
                 pst.setString(2, origen);
-               
+
                 pst.setString(3, destino);
-                               
-                pst.setString(4, fecha);                         
-                                           
-                pst.setString(5, precio);                       
-                                
-                pst.executeUpdate();                
-                                                   
+
+                pst.setString(4, fecha);
+
+                pst.setString(5, precio);
+
+                pst.executeUpdate();
+
             } catch (SQLException ex) {
                 Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+            request.setAttribute("Aviso", "Viaje publicado correctamente");
             request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
         }
-        
-        
-        
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
