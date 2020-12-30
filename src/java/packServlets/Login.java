@@ -37,29 +37,27 @@ public class Login extends HttpServlet {
         Connection conn = BD.getConexion();
         Statement st; //<--- sentencia de SQL 
         ResultSet rs; //<--- el resultado de la sentencia
-        
-              
+
         //**********************************        
-        
         String correo = request.getParameter("email");
         String contra = request.getParameter("password");
-        
+
         System.out.println("El correo del formulario: " + correo);
         System.out.println("La contraseña del formulario: " + contra);
-        
+
         try {
             st = conn.createStatement();
             rs = st.executeQuery("select email,password,coche from usuario");
-            
+
             boolean existe = true;
 
             while (rs.next()) {
 
                 String email = rs.getString("email");
                 String contraa = rs.getString("password");
-                
+
                 if (correo.equals(email) && contra.equals(contraa)) {
-                    
+
                     existe = false;
 
                     System.out.println("Estas dentro de la BD");
@@ -68,10 +66,11 @@ public class Login extends HttpServlet {
 
                     s.setAttribute("email", email);
                     s.setAttribute("password", contra);
-                    
+
                     String coche = rs.getString("coche"); //<-- recupera de la BD el campo coche
-                    if ( coche != null )
-                        s.setAttribute("coche", coche );                    
+                    if (coche != null) {
+                        s.setAttribute("coche", coche);
+                    }
 
                     //se ven los datos en la direccion
                     //request.getRequestDispatcher("indexlogueado.html").forward(request, response);
@@ -79,14 +78,11 @@ public class Login extends HttpServlet {
                 }
             }
             if (existe == true) {
-                PrintWriter out = response.getWriter();
-
-                out.println("<script>");
-                out.println("alert(\"Informacion de Login Incorrecta\");");
-                out.println("</script>");
-
+                
+                request.setAttribute("Aviso", "Informacion de Login Incorrecta");
                 RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
                 rd.include(request, response);
+                
             }
 
             rs.close();

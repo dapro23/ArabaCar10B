@@ -8,6 +8,7 @@ package packServlets;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +35,42 @@ public class EliminarReserva extends HttpServlet {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
 
         con = BD.getConexion();
+    }
+    
+    public boolean comprobarNumPasajeros(String idviaje) {
+        boolean out = false;
+
+        //hacer la select de los viajes desde esa fecha
+        try {
+            ResultSet rs;
+            
+            PreparedStatement pst2;
+
+            String query = "SELECT COUNT(*) FROM reservaviaje WHERE idviaje=?;";
+
+            pst2 = con.prepareStatement(query);
+
+            pst2.setString(1, idviaje);
+
+            rs = pst2.executeQuery();
+
+            rs.next();
+
+            int num = rs.getInt(1);
+
+            System.out.println("Num pasajeros " + num);
+
+            if (num >= 3) {
+                System.out.println("El viaje esta lleno");
+                out = true;
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return out;
+
     }
 
     /**
@@ -68,6 +105,8 @@ public class EliminarReserva extends HttpServlet {
             int i = pst1.executeUpdate();
             if (i != 0) {                
                 System.out.println("Reserva Eliminadao");
+            }else if(comprobarNumPasajeros(id)){                
+                request.setAttribute("Aviso", "El num de plzasa disponibles no ha aumentado");
             }else{
                 request.setAttribute("Aviso", "La Reserva a eliminar no existe");
             }

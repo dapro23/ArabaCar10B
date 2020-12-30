@@ -32,13 +32,13 @@
             <b>Introduce tu Informacion personal</b>
             <div class ="Aviso">
                 <%
-                    String avisoFecha = (String) request.getAttribute("AvisoFecha");
-                    if (avisoFecha == null) {
-                        avisoFecha = "";
+                    String usuario = (String) request.getAttribute("Aviso");
+                    if (usuario == null) {
+                        usuario = "";
                     }
 
                 %>
-                <label name="AvisoFecha" style="color:#e8491d"> <%=avisoFecha%> </label>
+                <label name="AvisoFecha" style="color:#e8491d"> <%=usuario%> </label>
             </div>
             <form id="myform" action="RegistrarUsuario" method = "post" enctype="multipart/form-data">
 

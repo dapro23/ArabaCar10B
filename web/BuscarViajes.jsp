@@ -1,4 +1,5 @@
 
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.GregorianCalendar"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.sql.Timestamp"%>
@@ -164,7 +165,7 @@
                     <%
                         ArrayList<Viaje> viajes = (ArrayList<Viaje>) request.getAttribute("viajes");
                         if (viajes == null) {                            
-                            request.setAttribute("avisoReserva", "No hay viajes para mostrar!");
+                            //request.setAttribute("avisoReserva", "No hay viajes para mostrar!");
                         } else {
 
                             //Esta logueado el usuario*****************************
@@ -208,7 +209,7 @@
                             String id = v.getConductor();
                             String origen = v.getOrigen();
                             String destino = v.getDestino();
-                            String fecha = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(v.getFecha());
+                            LocalDateTime fecha = v.getFecha();
                             //Timestamp fecha = v.getFecha();
 
                             double precio = v.getPrecio();

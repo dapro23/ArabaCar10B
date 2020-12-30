@@ -29,8 +29,8 @@ public class RealizarReserva extends HttpServlet {
 
     private Connection conn;
     private PreparedStatement pst1;
-    private PreparedStatement pst2;
-    private ResultSet rs;
+    //private PreparedStatement pst2;
+    //private ResultSet rs;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -45,6 +45,9 @@ public class RealizarReserva extends HttpServlet {
 
         //hacer la select de los viajes desde esa fecha
         try {
+            ResultSet rs;
+            
+            PreparedStatement pst2;
 
             String query = "SELECT COUNT(*) FROM reservaviaje WHERE idviaje=?;";
 

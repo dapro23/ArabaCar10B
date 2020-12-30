@@ -5,8 +5,8 @@
  */
 package packServlets;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Viaje {
 
@@ -15,16 +15,18 @@ public class Viaje {
     private String conductor;
     private String origen;
     private String destino;
-    private Timestamp fecha;
+    private LocalDateTime fecha;
+    private LocalDateTime fecha2;
     //private String hora;
     private double precio;
-
+    //private LocalDateTime creationDate;
+    private Timestamp ola;
     
     //Email y Fecha
     public Viaje(String id, Timestamp fecha) {
         
         this.id = id;
-        this.fecha = fecha;       
+        this.fecha = fecha.toLocalDateTime();       
     }
 
     
@@ -33,7 +35,7 @@ public class Viaje {
 
         this.origen = origen;
         this.destino = destino;
-        this.fecha = fecha;
+        this.fecha = fecha.toLocalDateTime();
         this.precio = precio;
     }
 
@@ -44,7 +46,7 @@ public class Viaje {
         this.conductor = conductor;
         this.origen = origen;
         this.destino = destino;
-        this.fecha = fecha;
+        this.fecha = fecha.toLocalDateTime();
         this.precio = precio;
     }
 
@@ -56,7 +58,7 @@ public class Viaje {
         this.conductor = conductor;
         this.origen = origen;
         this.destino = destino;
-        this.fecha = fecha;
+        this.fecha = fecha.toLocalDateTime();
         this.precio = precio;
     }
 
@@ -68,7 +70,19 @@ public class Viaje {
         this.conductor = conductor;
         this.origen = origen;
         this.destino = destino;
-        this.fecha = fecha;
+        this.fecha = fecha.toLocalDateTime();
+        this.precio = precio;
+    }
+    
+    public Viaje(String id, String nombre, String conductor, String origen, String destino, Timestamp fecha, Timestamp fecha2, double precio) {
+
+        this.id = id;
+        this.nombre = nombre;
+        this.conductor = conductor;
+        this.origen = origen;
+        this.destino = destino;
+        this.fecha = fecha.toLocalDateTime();
+        this.fecha2 = fecha2.toLocalDateTime();
         this.precio = precio;
     }
     
@@ -92,10 +106,14 @@ public class Viaje {
         return destino;
     }
 
-    public Timestamp getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
+    public LocalDateTime getFecha2() {
+        return fecha2;
+    }
+    
     public double getPrecio() {
         return precio;
     }

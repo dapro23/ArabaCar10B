@@ -4,6 +4,7 @@
     Author     : dramo
 --%>
 
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.sql.SQLException"%>
@@ -143,7 +144,7 @@
 
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
-                                Timestamp fecha = v.getFecha();
+                                LocalDateTime fecha = v.getFecha();
                                 double precio = v.getPrecio();
                     %>
 
@@ -191,7 +192,7 @@
 
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
-                                Timestamp fecha = v.getFecha();
+                                LocalDateTime fecha = v.getFecha();
                                 //SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                                 //String strFecha = formatter.format(fecha);
                                 double precio = v.getPrecio();

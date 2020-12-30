@@ -4,6 +4,7 @@
     Author     : dramo
 --%>
 
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.util.ArrayList"%>
@@ -106,7 +107,7 @@
                                 String id = v.getConductor();
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
-                                Timestamp fecha = v.getFecha();
+                                LocalDateTime fecha = v.getFecha();
                                 double precio = v.getPrecio();
                                 String boton = "<form action='EliminarViaje' onsubmit='{return checkIt(" + id + ");}'>"
                                         + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "'>Eliminar</Button>"

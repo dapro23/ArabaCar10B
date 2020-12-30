@@ -4,6 +4,7 @@
     Author     : dramo
 --%>
 
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.Timestamp"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="java.sql.ResultSet"%>
@@ -111,7 +112,7 @@
                     String idviaje = v.getConductor();
                     String origen = v.getOrigen();
                     String destino = v.getDestino();
-                    Timestamp fechaC = v.getFecha();
+                    LocalDateTime fechaC = v.getFecha();
                     double precio = v.getPrecio();
         %>
         <section id="dataWrapper" >
@@ -173,7 +174,7 @@
                         for (Viaje r : reservas) {
 
                             String emailP = r.getId();
-                            Timestamp fechaR = r.getFecha();
+                            LocalDateTime fechaR = r.getFecha();
                             String boton = "<form action='EliminarReservaPasajero' onsubmit='{return checkIt("+idviaje+");}'>"
                                     + "<Button id = 'botondetalles' name = 'botondetalles'>Eliminar</Button>"
                                     + "<input id='idviaje' name='idviaje' type='hidden' value='" + idviaje + "'></input>"
