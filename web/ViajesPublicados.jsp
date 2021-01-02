@@ -1,8 +1,3 @@
-<%-- 
-    Document   : publishedTrips
-    Created on : 5 dic. 2020, 20:39:35
-    Author     : dramo
---%>
 
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
@@ -31,14 +26,14 @@
 
         String mensaje = "Fecha actual: " + DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now());
 
-        try {
-            Connection conn = BD.getConexion();
-            PreparedStatement pst1;
-            PreparedStatement pst2;
-            ResultSet rs1;
-            ResultSet rs2;
+        Connection conn = BD.getConexion();
 
-            String query1 = "SELECT * FROM viaje WHERE email = ? AND fecha < current_date()";
+        try {
+
+            PreparedStatement pst1;
+            ResultSet rs1;
+
+            String query1 = "SELECT * FROM viaje WHERE email = ? AND fecha < current_date() ORDER BY fecha";
 
             pst1 = conn.prepareStatement(query1);
 
@@ -47,10 +42,10 @@
             rs1 = pst1.executeQuery();
 
             while (rs1.next()) {
-
-                //crear un arraylist de viajes
+                
                 viajesPasados.add(
                         new Viaje(
+                                rs1.getString("idviaje"),
                                 rs1.getString("origen"),
                                 rs1.getString("destino"),
                                 rs1.getTimestamp("fecha"),
@@ -58,11 +53,19 @@
                         )
                 );
 
-                System.out.println(rs1.getString("fecha"));
-
             }
 
-            String query2 = "SELECT * FROM viaje WHERE email = ? AND fecha > current_date()";
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en la consulta 1 !");
+        }
+
+        try {
+
+            PreparedStatement pst2;
+            ResultSet rs2;
+
+            String query2 = "SELECT * FROM viaje WHERE email = ? AND fecha > current_date() ORDER BY fecha";
 
             pst2 = conn.prepareStatement(query2);
 
@@ -72,9 +75,9 @@
 
             while (rs2.next()) {
 
-                //crear un arraylist de viajes
                 viajesFuturos.add(
                         new Viaje(
+                                rs2.getString("idviaje"),
                                 rs2.getString("origen"),
                                 rs2.getString("destino"),
                                 rs2.getTimestamp("fecha"),
@@ -82,13 +85,11 @@
                         )
                 );
 
-                System.out.println(rs2.getString("fecha"));
-
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Error en la consulta!");
+            System.err.println("Error en la consulta! 212");
         }
 
 
@@ -123,102 +124,223 @@
             <b>A continuacion saldran todos los viajes publicados que tienes</b>
         </section>
 
-        <section id="dataWrapper" >
+        <%            if (false) {
+                System.out.println("No hay viajes para mostrar!");
+            } else {
+                for (Viaje v : viajesPasados) {
+
+                    String idviajeP = v.getConductor();
+                    String origen = v.getOrigen();
+                    String destino = v.getDestino();
+                    String fechaC = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                    //LocalDateTime fechaC = v.getFecha();
+                    double precio = v.getPrecio();
+        %>
+        <section id="dataWrapper" >            
             <div id="elements">
-                <table >
-                    <caption>Viajes Pasados</caption>
-                    <thead>
-                        <tr>
-                            <th>Origen</th>
-                            <th>Destino</th>
-                            <th>Fecha </th>                          
-                            <th>Precio </th>
+                <table >                   
 
-                        </tr>
-                    </thead>
+                    <tbody id="elementsList"></tbody>
 
-                    <tbody id="elementsList">   </tbody>
-                    <%                        if (false) {
-                            System.out.println("No hay viajes para mostrar!");
-                        } else {
-                            for (Viaje v : viajesPasados) {
-
-                                String origen = v.getOrigen();
-                                String destino = v.getDestino();
-                                
-                                //LocalDateTime fecha = v.getFecha();
-                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
-                                
-                                double precio = v.getPrecio();
-                    %>
-
-                    <tr>
+                    <tr>                        
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Fecha </th>                          
+                        <th>Precio </th>
+                    </tr>
+                    <tr>                       
                         <td><%=origen%></td>
                         <td><%=destino%></td>
-                        <td><%=fecha%></td>                    
+                        <td><%=fechaC%></td>                    
                         <td><%=precio%></td>
+                    </tr>                    
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email Pasajero</th>
+                        <th>Fecha Reserva</th>                      
+                    </tr>                    
+
+                    <%
+                        ArrayList<Viaje> reservas = new ArrayList<>();
+                        PreparedStatement pst3;
+                        ResultSet rs3;
+
+                        try {
+
+                            String query3 = "SELECT * FROM reservaviaje WHERE idviaje = ? ORDER BY fecha";
+
+                            pst3 = conn.prepareStatement(query3);
+
+                            pst3.setString(1, idviajeP);
+
+                            rs3 = pst3.executeQuery();                            
+                            while (rs3.next()) {
+
+                                reservas.add(
+                                        new Viaje(
+                                                rs3.getString("email"),
+                                                rs3.getTimestamp("fecha")
+                                        )
+                                );
+
+                            }
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            System.err.println("Error en la consulta!");
+                        }
+
+                        for (Viaje r : reservas) {
+
+                            String emailP = r.getId();
+
+                            PreparedStatement pst;
+                            ResultSet rs;
+                            String query3 = "SELECT nombre FROM usuario WHERE email = ?";
+                            pst = conn.prepareStatement(query3);
+                            pst.setString(1, emailP);
+                            rs = pst.executeQuery();
+                            rs.next(); 
+                            
+                            String nombre = rs.getString("nombre");                         
+                            String fechaR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+
+                    %>              
+                    <tr>
+                        <td><%=nombre%></td>
+                        <td><%=emailP%></td>
+                        <td><%=fechaR%></td>                  
+
                     </tr>
 
                     <%
-                            }
+
                         }
+
+
                     %>
 
                     </tbody>
                 </table>
             </div>
         </section>
+
+        <%                            }
+            }
+        %>
+
 
         <section id="dataWrapper" >
             <caption><%=mensaje%></caption>
         </section>            
 
-        <section id="dataWrapper" >
+        <%
+            if (false) {
+                System.out.println("No hay viajes para mostrar!");
+            } else {
+                for (Viaje v : viajesFuturos) {
+
+                    String idviajeF = v.getConductor();
+                    String origen = v.getOrigen();
+                    String destino = v.getDestino();
+                    String fechaC = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                    double precio = v.getPrecio();
+        %>
+
+        <section id="dataWrapper" >            
             <div id="elements">
-                <table >
-                    <caption>Viajes Futuros</caption>
-                    <thead>
-                        <tr>
-                            <th>Origen</th>
-                            <th>Destino</th>
-                            <th>Fecha </th>                          
-                            <th>Precio </th>
+                <table >                   
 
-                        </tr>
-                    </thead>
+                    <tbody id="elementsList"></tbody>
 
-                    <tbody id="elementsList">   </tbody>
-                    <%
-                        if (false) {
-                            System.out.println("No hay viajes para mostrar!");
-                        } else {
-                            for (Viaje v : viajesFuturos) {
-
-                                String origen = v.getOrigen();
-                                String destino = v.getDestino();
-                                //LocalDateTime fecha = v.getFecha();
-                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
-                                //SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                                //String strFecha = formatter.format(fecha);
-                                double precio = v.getPrecio();
-                    %>
-
-                    <tr>
+                    <tr>                        
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Fecha </th>                          
+                        <th>Precio </th>
+                    </tr>
+                    <tr>                       
                         <td><%=origen%></td>
                         <td><%=destino%></td>
-                        <td><%=fecha%></td>                    
+                        <td><%=fechaC%></td>                    
                         <td><%=precio%></td>
                     </tr>
 
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Email Pasajero</th>
+                        <th>Fecha Reserva</th>                      
+                    </tr>
+
                     <%
+                        ArrayList<Viaje> reservas = new ArrayList<>();
+                        PreparedStatement pst4;
+                        ResultSet rs4;
+                        try {
+
+                            String query4 = "SELECT * FROM reservaviaje WHERE idviaje = ? ORDER BY fecha";
+
+                            pst4 = conn.prepareStatement(query4);
+
+                            pst4.setString(1, idviajeF);
+
+                            rs4 = pst4.executeQuery();
+                            
+                            while (rs4.next()) {
+
+                                reservas.add(
+                                        new Viaje(
+                                                rs4.getString("email"),
+                                                rs4.getTimestamp("fecha")
+                                        )
+                                );
+
                             }
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            System.err.println("Error en la consulta de viajes futuros!");
                         }
+
+                        for (Viaje r : reservas) {
+
+                            String emailP = r.getId();
+
+                            PreparedStatement pst;
+                            ResultSet rs;
+                            String query3 = "SELECT nombre FROM usuario WHERE email = ?";
+                            pst = conn.prepareStatement(query3);
+                            pst.setString(1, emailP);
+                            rs = pst.executeQuery();
+                            rs.next(); 
+                            
+                            String nombre = rs.getString("nombre");                            
+                            String fechaR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+
+                    %>              
+                    <tr>
+                        <td><%=nombre%></td>
+                        <td><%=emailP%></td>
+                        <td><%=fechaR%></td>                       
+
+                    </tr>
+
+                    <%
+
+                        }
+
+
                     %>
 
                     </tbody>
                 </table>
             </div>
         </section>
+
+        <%                            }
+            }
+        %>
+
 
 
     </body>

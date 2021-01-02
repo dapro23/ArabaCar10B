@@ -23,7 +23,8 @@ import packUtilidades.BD;
  * @author dramo
  */
 public class EliminarReservaPasajero extends HttpServlet {
-private Connection con;
+
+    private Connection con;
     private PreparedStatement pst1;
 
     @Override
@@ -46,9 +47,9 @@ private Connection con;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String id = request.getParameter("idviaje");               
+        String id = request.getParameter("idviaje");
         String email = request.getParameter("email");
-        
+
         System.out.println("Datos del Form: " + id + "Email del Seassion " + email);
 
         try {
@@ -59,17 +60,18 @@ private Connection con;
 
             pst1.setString(1, email);
             pst1.setString(2, id);
-            
 
             int i = pst1.executeUpdate();
-            if (i != 0) {                
-                System.out.println("Reserva Eliminada");
-            }else{
-                request.setAttribute("Aviso", "La Reserva a eliminar no existe");
-            }
 
+            if (i == 1) {
+                request.setAttribute("Aviso", "Reserva Eliminada");
+            } else if (i == 0) {
+                request.setAttribute("Aviso", "Reserva NO Eliminada");
+            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("Aviso", "Error al eliminar la Reserva");
         }
 
         request.getRequestDispatcher("EliminarReservaPasajero.jsp").forward(request, response);

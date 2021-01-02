@@ -16,7 +16,7 @@ public class BD {
         if (conn == null) {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/arabacar10b?serverTimezone=GMT", "root", "root");
+                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/arabacar10b?serverTimezone=UTC", "root", "root");
                 System.out.println("Se ha conectado.");
             } catch (ClassNotFoundException ex1) {
                 System.out.println("No se ha conectado: " + ex1);

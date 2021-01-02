@@ -1,8 +1,3 @@
-<%-- 
-    Document   : login
-    Created on : 5 dic. 2020, 18:29:35
-    Author     : dramo
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -32,17 +27,7 @@
             </div>
         </header>
         <section id="form-box">
-            <b>Introduce tu informacion de login</b>
-            <div class ="Aviso">
-                <%
-                    String usuario = (String) request.getAttribute("Aviso");
-                    if (usuario == null) {
-                        usuario = "";
-                    }
-
-                %>
-                <label name="AvisoFecha" style="color:#e8491d"> <%=usuario%> </label>
-            </div>
+            <b>Introduce tu informacion de login</b>            
             <form action="Login" id="formulariologin">
                 <div class="formContent">
                     <label for="email"> Email </label> 
@@ -58,5 +43,17 @@
                 <a href="loginRegister.jsp">No tienes una cuenta?</a><br>
             </form>
         </section>
+
+        <section id="form-box">  
+            <%
+                String usuario = (String) request.getAttribute("Aviso");
+                if (usuario == null) {
+                    usuario = "";
+                }
+
+            %>
+            <label name="AvisoFecha" style="color: white"> <%=usuario%> </label>
+        </section>   
+
     </body>
 </html>

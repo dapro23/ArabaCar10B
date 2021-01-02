@@ -1,8 +1,3 @@
-<%-- 
-    Document   : eliminarViaje
-    Created on : 23-dic-2020, 17:11:01
-    Author     : dramo
---%>
 
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
@@ -21,13 +16,13 @@
         //https://stackoverflow.com/questions/15784069/getdatetime-from-resultset-java/21860779
         HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
-        ArrayList<Viaje> viajes = new ArrayList<>();
-        //String mensaje = "La fecha actual es: " + LocalDate.now();
+        ArrayList<Viaje> viajes = new ArrayList<>();       
+        Connection conn = BD.getConexion();
         try {
-            Connection conn = BD.getConexion();
+            
             PreparedStatement pst1;
             ResultSet rs1;
-            String query1 = "SELECT * FROM viaje WHERE email = ? AND fecha > current_date()";
+            String query1 = "SELECT * FROM viaje WHERE email = ? AND fecha > current_date() ORDER BY fecha";
             pst1 = conn.prepareStatement(query1);
             pst1.setString(1, email);
             rs1 = pst1.executeQuery();
@@ -50,8 +45,7 @@
     %>
 
     <script>
-        function checkIt(id) {
-            //var id = document.getElementById('botondetalles').value;
+        function checkIt(id) {            
             if (confirm('Eliminar Viaje con Id: ' + id)) {
                 return true;
             } else {
@@ -94,8 +88,9 @@
                         <tr>                            
                             <th>Origen</th>
                             <th>Destino</th>
-                            <th>Fecha </th>                          
+                            <th>Fecha</th>                             
                             <th>Precio </th>
+                            <th>Apuntados</th>
 
                         </tr>
                     </thead>
@@ -112,8 +107,26 @@
                                 String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
                                 double precio = v.getPrecio();
                                 String boton = "<form action='EliminarViaje' onsubmit='{return checkIt(" + id + ");}'>"
-                                        + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "'>Eliminar</Button>"                                        
+                                        + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "'>Eliminar</Button>"
                                         + "</form>";
+                                
+                                String num = "";
+                                
+                                try{
+                                PreparedStatement pst;
+                                ResultSet rs;
+                                String query3 = "SELECT Count(*) AS num FROM reservaviaje WHERE idviaje = ?";
+                                pst = conn.prepareStatement(query3);
+                                pst.setString(1, id);
+                                rs = pst.executeQuery();
+                                rs.next();
+                                num = rs.getString("num");
+                                
+                                }catch (SQLException e) {
+                                     e.printStackTrace();
+                                    System.err.println("Error en la consulta!");
+                                }
+
                     %>
 
                     <tr>                       
@@ -121,6 +134,7 @@
                         <td><%=destino%></td>
                         <td><%=fecha%></td>                    
                         <td><%=precio%></td>
+                        <td><%=num%></td>
                         <td><%=boton%></td> 
                     </tr>
 

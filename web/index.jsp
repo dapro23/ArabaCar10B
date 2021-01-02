@@ -1,8 +1,5 @@
-<%-- 
-    Document   : index
-    Created on : 5 dic. 2020, 18:23:43
-    Author     : dramo
---%>
+
+<%@page import="java.sql.SQLException"%>
 <%@page import="java.nio.file.FileSystems"%>
 <%@page import="java.nio.file.Paths"%>
 <%@page import="java.io.FileOutputStream"%>
@@ -45,7 +42,7 @@
     %>
 
     <script>
-        function checkIt() {           
+        function checkIt() {
 
             if (confirm('¿Deseas Cerrar Sesion?')) {
                 return true;
@@ -54,7 +51,7 @@
             }
         }
     </script>  
-       
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
@@ -76,51 +73,48 @@
                     <li>
                     <li><h1 >ArabaCar</h1></li>
 
-                    <%!
-                        //lo que pongas aqui se mantiene 
-                        //Las variables declaradas conservarán su valor entre sucesivas llamadas a la página, ya que son variables miembro del
-                        //servlet y no locales al método jspService. 
-                        Connection conn;
-                        Statement st;
-                        ResultSet rs;
-
-                        public void jspInit() {
-                            System.out.println("Iniciando el JSP");
-                            conn = BD.getConexion();
-                        }
-
-                        ;
-                    %>   
                     <%
-                        //se ejecuta cada vez que llegas a esta pagina
-                        //recuperamos el email del session storage
-                        HttpSession s = request.getSession();
-                        String e = (String) s.getAttribute("email");
-                        //String e = "david@gmail.com";
-                        st = conn.createStatement();
-                        rs = st.executeQuery("select * from usuario where email = '" + e + "'");
-                        rs.next(); //mover el cursor la fila que contiene los datos de la select
-                        //esta linea es posible porque se ha verificado el login previamente
                         String n = "";
                         String imgDataBase64 = "";
+                        try {
+                            Connection conn;
+                            Statement st;
+                            ResultSet rs;
 
-                        if (s.getAttribute("email") != null) {
+                            System.out.println("Iniciando el JSP");
+                            conn = BD.getConexion();
 
-                            n = rs.getString("nombre");
-                            //System.out.println("Bienvenido/a " + n);
-                            //el nombre se mostrará en el label que viene despues
-                            //objeto Blob recuperado de la BD
-                            Blob image = rs.getBlob("foto");
-                            byte[] imgData = null;
-                            imgData = image.getBytes(1, (int) image.length());
-                            imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+                            HttpSession s = request.getSession();
+                            String e = (String) s.getAttribute("email");
+
+                            if (s.getAttribute("email") != null) {
+
+                                st = conn.createStatement();
+                                rs = st.executeQuery("select * from usuario where email = '" + e + "'");
+                                rs.next();
+
+                                n = rs.getString("nombre");
+                                n = "Hola " + n;
+                                //System.out.println("Bienvenido/a " + n);
+                                //el nombre se mostrará en el label que viene despues
+                                //objeto Blob recuperado de la BD
+                                Blob image = rs.getBlob("foto");
+                                byte[] imgData = null;
+                                imgData = image.getBytes(1, (int) image.length());
+                                imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+                            }
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            System.err.println("Error en la consulta!");
                         }
+
+
                     %>
-
                     <li><h1 id = "usuario"> <%=n%> </h1></li> 
-
-                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">                       
-
+                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
+                    
+                    
                     </li>
                 </div>
             </div>
@@ -176,7 +170,9 @@
         <div id="6">
             <section id="form-box">
                 <div class="container">
-                    <form action="LoginOut" onsubmit='{return checkIt();}'>
+                    <form action="LoginOut" onsubmit='{
+                                return checkIt();
+                            }'>
                         <button class="button" id="logoutButton">Cerrar sesion</button>
                     </form>
                 </div>

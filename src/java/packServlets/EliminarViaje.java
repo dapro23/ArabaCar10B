@@ -60,14 +60,15 @@ public class EliminarViaje extends HttpServlet {
             pst1.setString(1, id);
 
             int i = pst1.executeUpdate();
-            if (i != 0) {
-                System.out.println("Viaje Eliminado");
-            } else {
-                request.setAttribute("Aviso", "El viaje con id: ("+ id +") no existe");
+            if (i == 1) {
+                request.setAttribute("Aviso", "Viaje Eliminado");
+            } else if (i != 0) {                
+                request.setAttribute("Aviso", "El viaje con id: (" + id + ") no fue eliminado");
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("Aviso", "Error al eliminar el viaje");
         }
 
         request.getRequestDispatcher("EliminarViaje.jsp").forward(request, response);

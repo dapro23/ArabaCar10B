@@ -35,8 +35,7 @@ public class BuscarViajes extends HttpServlet {
         String origen = request.getParameter("origen");
         String destino = request.getParameter("destino");
         String fecha = request.getParameter("fecha");
-
-        //Date fechaDate = Fechas.convertirADate(fecha);
+        
         if (origen.equals(destino)) {
 
             request.setAttribute("Aviso", "Origen y destino no pueden ser iguales");
@@ -51,20 +50,17 @@ public class BuscarViajes extends HttpServlet {
             String email = (String) s.getAttribute("email");
 
             if (email == null) {
-                //no hay ningun usuario logueado
+            //no hay ningun usuario logueado
 
                 try {
 
                     Connection conn = BD.getConexion();
                     PreparedStatement pst;
                     ResultSet rs;
-
-                    //hacer la select de los viajes desde esa fecha
+                    
                     String query = "SELECT * FROM viaje WHERE origen = ? and destino = ? and fecha > ? ORDER BY fecha";
 
-                    pst = conn.prepareStatement(query);
-
-                    System.out.println("No hay usuarios registrados");
+                    pst = conn.prepareStatement(query);                    
 
                     pst.setString(1, origen);
                     pst.setString(2, destino);
@@ -74,9 +70,7 @@ public class BuscarViajes extends HttpServlet {
 
                     ArrayList<Viaje> viajes = new ArrayList<>();
 
-                    while (rs.next()) {
-
-                        //crear un arraylist de viajes
+                    while (rs.next()) {                        
                         viajes.add(
                                 new Viaje(
                                         rs.getString("idviaje"),
@@ -108,9 +102,7 @@ public class BuscarViajes extends HttpServlet {
 
                     String query = "SELECT * FROM viaje WHERE origen = ? and destino = ? and fecha > ? AND email <> ? AND idviaje NOT IN (SELECT idviaje FROM reservaviaje WHERE email = ?) ORDER BY fecha";
 
-                    pst = conn.prepareStatement(query);
-
-                    System.out.println("El email del seasion: " + email);
+                    pst = conn.prepareStatement(query);                    
 
                     pst.setString(1, origen);
                     pst.setString(2, destino);
@@ -138,8 +130,7 @@ public class BuscarViajes extends HttpServlet {
                         rs2.next();
                         
                         String nombre = rs2.getString("nombre");
-
-                        //crear un arraylist de viajes
+                        
                         viajes.add(
                                 new Viaje(
                                         rs.getString("idviaje"),
@@ -153,9 +144,7 @@ public class BuscarViajes extends HttpServlet {
                         );
 
                     }
-
-                    //guardar en el atributo "viajes" el arrayList de viajes
-                    //que cumplen el filtro
+                    
                     request.setAttribute("viajes", viajes);
 
                 } catch (SQLException e) {

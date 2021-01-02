@@ -1,9 +1,3 @@
-<%-- 
-    Document   : loginRegister
-    Created on : 5 dic. 2020, 18:32:33
-    Author     : dramo
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -29,22 +23,12 @@
             </div>
         </header>
         <section id="form-box">
-            <b>Introduce tu Informacion personal</b>
-            <div class ="Aviso">
-                <%
-                    String usuario = (String) request.getAttribute("Aviso");
-                    if (usuario == null) {
-                        usuario = "";
-                    }
-
-                %>
-                <label name="AvisoFecha" style="color:#e8491d"> <%=usuario%> </label>
-            </div>
+            <b>Introduce tu Informacion personal</b>            
             <form id="myform" action="RegistrarUsuario" method = "post" enctype="multipart/form-data">
 
                 <div class="formContent">
                     <label for="Nombre"> Nombre </label> 
-                    <input type="text" placeholder= "nombre" id="nombre" name="nombre" required>
+                    <input type="text" placeholder= "nombre" id="nombre" name="nombre" pattern="[a-zA-Z]{4,}" required>
                 </div>
 
                 <div class="formContent">
@@ -54,19 +38,19 @@
 
                 <div class="formContent">
                     <label for="Email"> Email </label>
-                    <input type="email" placeholder= "emal" id="email" name = "email" required>
+                    <input type="email" placeholder= "emal" id="email" name = "email" pattern="(?!.*\.\.)(^[^\.][^@\s]+@[^@\s]+\.[^@\s\.]+$)" required>
                 </div>
                 <p id='resultemail' style="color: red">  </p>
 
                 <div class="formContent">
                     <label for="Password"> Password </label>
-                    <input type="password" placeholder= "password" id="password" name = "password" required>
+                    <input type="password" placeholder= "password" id="password" name = "password" pattern="[a-zA-Z0-9_.+-]{4,}" required>
                 </div>
                 <p id='resultpassword' style="color: red">  </p>
 
                 <div class="formContent">
                     <label for="Dni"> DNI </label>
-                    <input type="text" placeholder= "DNI" id="dni" name = "dni" pattern="[2-9]{1}[0-9]{7}[a-zA-Z]{1}" required>
+                    <input type="text" placeholder= "ej: 12345678A" id="dni" name = "dni" pattern="[2-9]{1}[0-9]{7}[a-zA-Z]{1}" required>
                 </div>
                 <p id='resultdni' style="color: red">  </p>
 
@@ -93,7 +77,7 @@
 
                 <div class="formContent">
                     <label for="coche"> Coche </label>
-                    <input type="text" placeholder= "Marca/Modelo de Coche" id="coche" name = "coche" >
+                    <input type="text" placeholder= "Marca y Modelo de Coche" id="coche" name = "coche" >
                 </div>
 
                 <div class="formContent">
@@ -101,5 +85,17 @@
                 </div>
             </form>
         </section>
+
+        <section id="form-box">
+            <%
+                String usuario = (String) request.getAttribute("Aviso");
+                if (usuario == null) {
+                    usuario = "";
+                }
+
+            %>
+            <label name="AvisoFecha" style="color:#e8491d"> <%=usuario%> </label>
+        </section>
+
     </body>
 </html>

@@ -6,7 +6,6 @@
 package packServlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,22 +27,18 @@ import packUtilidades.BD;
 public class RealizarReserva extends HttpServlet {
 
     private Connection conn;
-    private PreparedStatement pst1;
-    //private PreparedStatement pst2;
-    //private ResultSet rs;
+    private PreparedStatement pst1;    
 
     @Override
     public void init(ServletConfig config) throws ServletException {
 
-        super.init(config); //To change body of generated methods, choose Tools | Templates.
-
+        super.init(config); 
         conn = BD.getConexion();
     }
 
     public boolean comprobarNumPasajeros(String idviaje) {
         boolean out = false;
-
-        //hacer la select de los viajes desde esa fecha
+        
         try {
             ResultSet rs;
             
@@ -59,9 +54,7 @@ public class RealizarReserva extends HttpServlet {
 
             rs.next();
 
-            int num = rs.getInt(1);
-
-            System.out.println("Num pasajeros " + num);
+            int num = rs.getInt(1);            
 
             if (num >= 3) {
                 System.out.println("El viaje esta lleno");
@@ -87,12 +80,11 @@ public class RealizarReserva extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        //System.out.println( request, "" + " "));
+        
         HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
 
-        String idviaje = request.getParameter("botondetalles"); //falta sacar el id del viaje para realizar la reserva
+        String idviaje = request.getParameter("botondetalles"); 
 
         System.out.println("idviaje: " + idviaje);
 
@@ -120,9 +112,9 @@ public class RealizarReserva extends HttpServlet {
 
                     int num = pst1.executeUpdate();
 
-                    if (num != 0) {
-                        request.setAttribute("avisoReserva", "La reserva se ha relizado");
-                    } else {
+                    if (num == 1) {
+                        request.setAttribute("avisoReserva", "La reserva se ha relizado con exito");
+                    }else if(num == 0) {
                         request.setAttribute("avisoReserva", "La reserva NO se ha relizado");
                     }
 
@@ -133,7 +125,6 @@ public class RealizarReserva extends HttpServlet {
             }
         }
         request.getRequestDispatcher("BuscarViajes.jsp").forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

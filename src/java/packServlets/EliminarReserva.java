@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 package packServlets;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,10 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import packUtilidades.BD;
 
-/**
- *
- * @author dramo
- */
 public class EliminarReserva extends HttpServlet {
 
     private Connection con;
@@ -35,44 +29,8 @@ public class EliminarReserva extends HttpServlet {
         super.init(config); //To change body of generated methods, choose Tools | Templates.
 
         con = BD.getConexion();
-    }
+    }  
     
-    public boolean comprobarNumPasajeros(String idviaje) {
-        boolean out = false;
-
-        //hacer la select de los viajes desde esa fecha
-        try {
-            ResultSet rs;
-            
-            PreparedStatement pst2;
-
-            String query = "SELECT COUNT(*) FROM reservaviaje WHERE idviaje=?;";
-
-            pst2 = con.prepareStatement(query);
-
-            pst2.setString(1, idviaje);
-
-            rs = pst2.executeQuery();
-
-            rs.next();
-
-            int num = rs.getInt(1);
-
-            System.out.println("Num pasajeros " + num);
-
-            if (num >= 3) {
-                System.out.println("El viaje esta lleno");
-                out = true;
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return out;
-
-    }
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -90,7 +48,7 @@ public class EliminarReserva extends HttpServlet {
         HttpSession s = request.getSession();       
         String email = (String) s.getAttribute("email");
         
-        System.out.println("Datos del Form: " + id + "Email del Seassion " + email);
+        //System.out.println("Datos del Form: " + id + "Email del Seassion " + email);
 
         try {
 
@@ -99,20 +57,21 @@ public class EliminarReserva extends HttpServlet {
             pst1 = con.prepareStatement(query);
 
             pst1.setString(1, email);
-            pst1.setString(2, id);
-            
+            pst1.setString(2, id);            
 
             int i = pst1.executeUpdate();
-            if (i != 0) {                
-                System.out.println("Reserva Eliminadao");
-            }else if(comprobarNumPasajeros(id)){                
-                request.setAttribute("Aviso", "El num de plzasa disponibles no ha aumentado");
+            
+            if (i == 1) {                
+                request.setAttribute("Aviso", "Reserva Eliminada");
+            }else if(i == 0){
+                request.setAttribute("Aviso", "Reserva No Eliminada");
             }else{
                 request.setAttribute("Aviso", "La Reserva a eliminar no existe");
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            request.setAttribute("Aviso", "Error al eliminar le reserva");
         }
 
         request.getRequestDispatcher("EliminarReserva.jsp").forward(request, response);

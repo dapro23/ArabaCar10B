@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import javax.swing.JOptionPane;
 import packUtilidades.BD;
 
 @MultipartConfig(maxFileSize = 16177215)    // upload file's size up to 16MB
@@ -40,8 +39,7 @@ public class RegistrarUsuario extends HttpServlet {
             String query = "select * from usuario where email = '" + email + "'";
             st = conn.createStatement();
             rs = st.executeQuery(query);
-
-            //if ( rs.getRow() == 1 )
+           
             if (rs.next()) {
                 enc = true;
             }
@@ -62,17 +60,12 @@ public class RegistrarUsuario extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException {     
         
-        //request.setAttribute("Aviso", "");
-
         String email = request.getParameter("email");
 
-        if (existeUsuario(email)) {
-
-            System.out.println("YA EXISTE!!! el usuario");
-            request.setAttribute("Aviso", "Ya existe un usuario con los mismos datos");
-
+        if (existeUsuario(email)) {            
+            request.setAttribute("Aviso", "Ya existe un usuario registrado con los mismos datos");
         } else {
 
             try {

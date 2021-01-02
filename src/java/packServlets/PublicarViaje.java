@@ -30,11 +30,8 @@ import packUtilidades.BD;
 public class PublicarViaje extends HttpServlet {
 
     private Connection conn;
-    private PreparedStatement pst;
-    //private PreparedStatement pst2;
-    //private ResultSet rs;
-    private ResultSet rs2;
-
+    private PreparedStatement pst; 
+    
     @Override
     public void init(ServletConfig config) throws ServletException {
 
@@ -49,10 +46,7 @@ public class PublicarViaje extends HttpServlet {
 
         try {
 
-            //Statement st = conn.createStatement();
-
-            Statement stmt = conn.createStatement();
-            
+            Statement stmt = conn.createStatement();            
 
             String fecha2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH").format(fecha);
             
@@ -62,9 +56,8 @@ public class PublicarViaje extends HttpServlet {
 
             ResultSet rs2 = stmt.executeQuery(query);
                       
-            System.out.println(query);            
-
-            //if ( rs.getRow() == 1 )
+            System.out.println(query);
+            
             if (rs2.next()) {
                 num = 1;
                 System.out.println("ENCONTRADO TRUE");
@@ -74,7 +67,6 @@ public class PublicarViaje extends HttpServlet {
             num = -1;
             e.printStackTrace();
         }
-
         return num;
     }
 
@@ -98,12 +90,9 @@ public class PublicarViaje extends HttpServlet {
 
         String fecha = request.getParameter("fecha");
         String hora = request.getParameter("hora");
-
-        //fecha = fecha + " " + hora + ":00";
+       
         fecha = fecha + " " + hora;
-
-        //fecha = fecha.
-        //String str = "2016-03-04 11:30";
+        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(fecha, formatter);
 
@@ -120,8 +109,7 @@ public class PublicarViaje extends HttpServlet {
             request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
 
         } else if (a == -1) {
-
-            System.out.println("Error SQL en la sentencia!!!");
+           
             request.setAttribute("Aviso", "Error en la comprobacion de duplicidad");
             request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
 
@@ -148,7 +136,6 @@ public class PublicarViaje extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(RegistrarUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
-
             request.setAttribute("Aviso", "Viaje publicado correctamente");
             request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
         }

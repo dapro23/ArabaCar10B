@@ -17,15 +17,20 @@ public class Viaje {
     private String destino;
     private LocalDateTime fecha;
     private LocalDateTime fecha2;
-    //private String hora;
     private double precio;
-    //private LocalDateTime creationDate;
-    private Timestamp ola;
+   
+ 
     
     //Email y Fecha
     public Viaje(String id, Timestamp fecha) {
         
         this.id = id;
+        this.fecha = fecha.toLocalDateTime();       
+    }
+    
+    public Viaje(String id, String nombre, Timestamp fecha) {        
+        this.id = id;
+        this.nombre = nombre;        
         this.fecha = fecha.toLocalDateTime();       
     }
 

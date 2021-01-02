@@ -1,9 +1,3 @@
-<%-- 
-    Document   : Desapuntarse
-    Created on : 23-dic-2020, 17:20:04
-    Author     : dramo
---%>
-
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.ArrayList"%>
@@ -18,15 +12,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%
-        //https://stackoverflow.com/questions/15784069/getdatetime-from-resultset-java/21860779
-
+    <%      
         HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
 
         ArrayList<Viaje> viajes = new ArrayList<>();
-
-        //String mensaje = "La fecha actual es: " + LocalDate.now();
+        
         try {
             Connection conn = BD.getConexion();
             PreparedStatement pst1;
@@ -65,9 +56,7 @@
     %>
 
     <script>
-        function checkIt(idV) {
-
-            //var idV = document.getElementById('botondetalles').value;
+        function checkIt(idV) {            
 
             if (confirm('Eliminar Viaje con Id: ' + idV)) {
                 return true;
@@ -162,10 +151,9 @@
                     if (aviso == null)
                         aviso = "";
                 %>
-                <label name="Aviso" style="color: red"> <%=aviso%> </label>
-
-                
-            </form>
+                <label name="Aviso" style="color: white"> <%=aviso%> </label>           
+            
         </section>   
+                
     </body>
 </html>

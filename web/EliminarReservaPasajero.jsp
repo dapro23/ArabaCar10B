@@ -1,8 +1,3 @@
-<%-- 
-    Document   : eliminarReservaPasajero
-    Created on : 23-dic-2020, 17:12:12
-    Author     : dramo
---%>
 
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
@@ -17,9 +12,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%
-        //https://stackoverflow.com/questions/15784069/getdatetime-from-resultset-java/21860779
-
+    <%        
         HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
 
@@ -34,7 +27,7 @@
 
         try {
 
-            String query1 = "SELECT * FROM viaje WHERE email = ? AND fecha > current_date()";
+            String query1 = "SELECT * FROM viaje WHERE email = ? AND fecha > current_date() ORDER BY fecha";
 
             pst1 = conn.prepareStatement(query1);
 
@@ -65,10 +58,7 @@
 
     %>
     <script>
-        function checkIt(id) {
-
-            //var id = document.getElementById('idviaje').value;
-            //var email = document.getElementById('email').value;
+        function checkIt(id) {           
 
             if (confirm("Eliminar reserva con id: " + id)) {
                 return true;
@@ -103,9 +93,8 @@
             <b>Estos son todos los viajes que tienes pendientes de hacer y las personas que se han apuntado a esos viajes</b>
         </section>
 
-
-
-        <%                    if (false) {
+        <%            
+            if (false) {
                 System.out.println("No hay viajes para mostrar!");
             } else {
                 for (Viaje v : viajes) {
@@ -136,7 +125,7 @@
                         <td><%=precio%></td>
                     </tr>
                     <tr>
-
+                        <th>Nombre</th>
                         <th>Email Pasajero</th>
                         <th>Fecha Reserva</th>                      
                     </tr>
@@ -145,15 +134,14 @@
                         ArrayList<Viaje> reservas = new ArrayList<>();
                         try {
 
-                            String query2 = "SELECT * FROM reservaviaje WHERE idviaje = ?;";
+                            String query2 = "SELECT * FROM reservaviaje WHERE idviaje = ? ORDER BY fecha";
 
                             pst2 = conn.prepareStatement(query2);
 
                             pst2.setString(1, idviaje);
 
                             rs2 = pst2.executeQuery();
-
-                            //System.out.println("1: " + rs2.getString("email") + " 2: " + rs2.getTimestamp("fecha"));
+                            
                             while (rs2.next()) {
 
                                 reservas.add(
@@ -173,10 +161,19 @@
                         for (Viaje r : reservas) {
 
                             String emailP = r.getId();
-                            //LocalDateTime fechaR = r.getFecha();
-                            String fechaR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+
+                            PreparedStatement pst;
+                            ResultSet rs;
+                            String query3 = "SELECT nombre FROM usuario WHERE email = ?";
+                            pst = conn.prepareStatement(query3);
+                            pst.setString(1, emailP);
+                            rs = pst.executeQuery();
+                            rs.next(); 
                             
-                            String boton = "<form action='EliminarReservaPasajero' onsubmit='{return checkIt("+idviaje+");}'>"
+                            String nombre = rs.getString("nombre");                          
+                            String fechaR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+
+                            String boton = "<form action='EliminarReservaPasajero' onsubmit='{return checkIt(" + idviaje + ");}'>"
                                     + "<Button id = 'botondetalles' name = 'botondetalles'>Eliminar</Button>"
                                     + "<input id='idviaje' name='idviaje' type='hidden' value='" + idviaje + "'></input>"
                                     + "<input id='email' name='email' type='hidden' value='" + emailP + "'></input>"
@@ -184,7 +181,7 @@
 
                     %>              
                     <tr>
-
+                        <td><%=nombre%></td>
                         <td><%=emailP%></td>
                         <td><%=fechaR%></td>
                         <td><%=boton%></td> 
@@ -207,9 +204,6 @@
             }
         %>
 
-
-
-
         <section id="form-box">             
 
             <%                String aviso = (String) request.getAttribute("Aviso");
@@ -217,7 +211,7 @@
                 if (aviso == null)
                     aviso = "";
             %>
-            <label name="Aviso" style="color: red"> <%=aviso%> </label>
+            <label name="Aviso" style="color: white"> <%=aviso%> </label>
 
         </section>
     </body>

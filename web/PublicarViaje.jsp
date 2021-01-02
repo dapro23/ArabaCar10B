@@ -1,8 +1,3 @@
-<%-- 
-    Document   : publishATrip
-    Created on : 5 dic. 2020, 18:37:57
-    Author     : dramo
---%>
 
 <%@page import="java.util.GregorianCalendar"%>
 <%@page import="java.util.Calendar"%>
@@ -33,16 +28,7 @@
         </header>
         <section id="form-box">
             <b>Introduce la informacion del viaje</b>
-            <div class ="Aviso">
-                <%
-                    String usuario = (String) request.getAttribute("Aviso");
-                    if (usuario == null) {
-                        usuario = "";
-                    }
 
-                %>
-                <label name="AvisoFecha" style="color:#e8491d"> <%=usuario%> </label>
-            </div>
             <form id="myform" action="PublicarViaje">
                 <div class="formContent">
                     <label for="Origen"> Origen </label>
@@ -69,16 +55,13 @@
                         int mes = fechaC.get(Calendar.MONTH);
                         int dia = fechaC.get(Calendar.DAY_OF_MONTH);
                         mes++;
-                        String fechaActual = año + "-" + mes + "-" + dia;
-                        System.err.println(fechaActual);
+                        String fechaActual = año + "-" + mes + "-" + dia;                     
 
                         String fechaForm = "<label for='Fecha'> Fecha </label>"
                                 + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='2021-12-31' >";
                     %>
                     <%=fechaForm%>       
                 </div>  
-
-
 
                 <div class="formContent">
                     <label for="hora"> Hora </label>
@@ -92,12 +75,22 @@
                             })(this)">
                 </div>
 
-
-
                 <div class="formContent">
                     <button class="button" type='submit' id="boton">Publicar</button>
                 </div>
             </form>
         </section>
+
+        <section id="form-box">
+            <%
+                String usuario = (String) request.getAttribute("Aviso");
+                if (usuario == null) {
+                    usuario = "";
+                }
+
+            %>
+            <label name="AvisoFecha" style="color: white"> <%=usuario%> </label>
+        </section>
+        
     </body>
 </html>

@@ -31,7 +31,7 @@
             }
         }
     </script>
-    
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
@@ -144,7 +144,7 @@
                         ArrayList<Viaje> viajes = (ArrayList<Viaje>) request.getAttribute("viajes");
                         if (viajes == null) {
                             //request.setAttribute("avisoReserva", "No hay viajes para mostrar!");
-                            
+
                         } else {//Esta logueado el usuario*****************************                            
                             if (request.getSession().getAttribute("email") != null) {
 
@@ -162,7 +162,6 @@
                                     double precio = v.getPrecio();
                                     String boton = "<form action='RealizarReserva' onsubmit='{return checkIt(" + id + ");}'>"
                                             + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "' action='BuscarViajes'>apuntarse</Button>"
-                                            + "<label for='botondetalles'> id: " + id + "</label> "
                                             + "</form>";
                     %>
                     <tr>
@@ -175,7 +174,7 @@
                         <td><%=boton%></td>                
                     </tr>     
                     <%
-                        }                        
+                        }
                     } else {//NO esta en el sistema
                         for (Viaje v : viajes) {
 
@@ -209,12 +208,16 @@
                     </tbody>
                 </table>
             </div>
+        </section>
+
+        <section id="form-box">   
             <%
                 avisoReserva = (String) request.getAttribute("avisoReserva");
                 if (avisoReserva == null)
                     avisoReserva = "";
             %>
             <label name="avisoReserva" style="color:#e8491d;"> <%=avisoReserva%> </label>
-        </section> 
+        </section>   
+
     </body>
 </html>

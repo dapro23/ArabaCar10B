@@ -6,13 +6,10 @@
 package packServlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,18 +36,15 @@ public class Login extends HttpServlet {
             ResultSet rs2 = stmt.executeQuery(query);
 
             System.out.println(query);
-
-            //if ( rs.getRow() == 1 )
+            
             if (rs2.next()) {
                 num = 1;
                 System.out.println("ENCONTRADO TRUE");
             }
 
         } catch (SQLException e) {
-            num = -1;
-            e.printStackTrace();
+            num = -1;           
         }
-
         return num;
     }
 

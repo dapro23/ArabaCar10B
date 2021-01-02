@@ -23,10 +23,8 @@ public class LoginOut extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-       
-           
-        //request.logout();
+            throws ServletException, IOException {   
+                   
         request.getSession().removeAttribute("email");        
         request.getSession().removeAttribute("password");
         request.getSession().removeAttribute("coche");

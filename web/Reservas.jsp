@@ -1,9 +1,3 @@
-<%-- 
-    Document   : reservations
-    Created on : 5 dic. 2020, 20:38:59
-    Author     : dramo
---%>
-
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.Timestamp"%>
@@ -19,8 +13,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%
-        //https://stackoverflow.com/questions/15784069/getdatetime-from-resultset-java/21860779
+    <%        
 
         HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
@@ -68,9 +61,7 @@
                                 rs1.getTimestamp("fechaReserva"),//fecha2
                                 rs1.getDouble("precio")
                         )
-                );
-
-                System.out.println(rs1.getString("fechaViaje"));
+                );                
 
             }
 
@@ -109,9 +100,7 @@
                                 rs2.getTimestamp("fechaReserva"),//fecha2
                                 rs2.getDouble("precio")
                         )
-                );
-
-                System.out.println(rs2.getString("fechaViaje"));
+                );                
 
             }
 
@@ -267,6 +256,5 @@
                 </table>
             </div>
         </section>
-
     </body>
 </html>
