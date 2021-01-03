@@ -12,35 +12,47 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%      
+    <%
         HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
 
         ArrayList<Viaje> viajes = new ArrayList<>();
-        
+
         try {
             Connection conn = BD.getConexion();
-            PreparedStatement pst1;
-            ResultSet rs1;
 
-            String query1 = "SELECT * FROM viaje WHERE idviaje IN (SELECT idviaje FROM reservaviaje WHERE email = ?) ORDER BY fecha";
+            String query1 = "SELECT R.fecha AS fechaReserva, V.idviaje, V.email AS emailConductor, V.origen, V.destino, V.fecha AS fechaViaje, V.precio FROM reservaviaje R, viaje V WHERE R.email = ? AND R.idviaje = V.idviaje AND V.fecha > current_date() order by R.fecha;";
 
-            pst1 = conn.prepareStatement(query1);
+            PreparedStatement pst1 = conn.prepareStatement(query1);
 
             pst1.setString(1, email);
 
-            rs1 = pst1.executeQuery();
+            ResultSet rs1 = pst1.executeQuery();
 
             while (rs1.next()) {
 
-                //crear un arraylist de viajes
+                PreparedStatement pst3;
+                ResultSet rs3;
+
+                String query3 = "SELECT email, nombre, movil FROM usuario WHERE email = ?";
+
+                pst3 = conn.prepareStatement(query3);
+
+                pst3.setString(1, rs1.getString("emailConductor"));
+
+                rs3 = pst3.executeQuery();
+
+                rs3.next();
+
+                //public Viaje(String id, String nombre, String conductor, String origen, String destino, Timestamp fecha, double precio) {
                 viajes.add(
                         new Viaje(
                                 rs1.getString("idviaje"),
-                                rs1.getString("email"),
+                                rs3.getString("nombre"),
+                                rs3.getString("email"),
                                 rs1.getString("origen"),
                                 rs1.getString("destino"),
-                                rs1.getTimestamp("fecha"),
+                                rs1.getTimestamp("fechaViaje"),//fecha                               
                                 rs1.getDouble("precio")
                         )
                 );
@@ -56,7 +68,7 @@
     %>
 
     <script>
-        function checkIt(idV) {            
+        function checkIt(idV) {
 
             if (confirm('Eliminar Viaje con Id: ' + idV)) {
                 return true;
@@ -65,7 +77,7 @@
             }
         }
     </script>
-    
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
@@ -93,11 +105,11 @@
 
         <section id="dataWrapper" >
             <div id="elements">
-                <table >
-                    <caption>Viajes Pasados</caption>
+                <table >                    
                     <thead>
-                        <tr>                            
-                            <th>Conductor</th>
+                        <tr>
+                            <th>Conductor</th>                            
+                            <th>Email</th>
                             <th>Origen</th>
                             <th>Destino</th>
                             <th>Fecha </th>                          
@@ -111,21 +123,27 @@
                             System.out.println("No hay viajes para mostrar!");
                         } else {
                             for (Viaje v : viajes) {
+                                //public Viaje(String id, String nombre, String conductor, String origen, String destino, Timestamp fecha, double precio) {
 
                                 String idViaje = v.getId();
-                                String conductor = v.getConductor();
+                                String nombrec = v.getNombre();
+                                String emailc = v.getConductor();
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
+                                //String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
                                 //LocalDateTime fecha = v.getFecha();
                                 String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                //LocalDateTime fecha2 = v.getFecha2();
                                 double precio = v.getPrecio();
-                                String boton = "<form action='EliminarReserva' onsubmit='{return checkIt("+ idViaje +");}'>"
-                                        + "<Button id = 'botondetalles' name = 'idviaje' value='" + idViaje + "' action='BuscarViajes'>Eliminar</Button>"                                        
+
+                                String boton = "<form action='EliminarReserva' onsubmit='{return checkIt(" + idViaje + ");}'>"
+                                        + "<Button id = 'botondetalles' name = 'idviaje' value='" + idViaje + "' action='BuscarViajes'>Eliminar</Button>"
                                         + "</form>";
                     %>
 
                     <tr>                        
-                        <td><%=conductor%></td>
+                        <td><%=nombrec%></td>
+                        <td><%=emailc%></td>
                         <td><%=origen%></td>
                         <td><%=destino%></td>
                         <td><%=fecha%></td>                    
@@ -144,16 +162,16 @@
         </section>
 
         <section id="form-box">   
-                       
-                <%
-                    String aviso = (String) request.getAttribute("Aviso");
 
-                    if (aviso == null)
-                        aviso = "";
-                %>
-                <label name="Aviso" style="color: white"> <%=aviso%> </label>           
-            
+            <%
+                String aviso = (String) request.getAttribute("Aviso");
+
+                if (aviso == null)
+                    aviso = "";
+            %>
+            <label name="Aviso" style="color: white"> <%=aviso%> </label>           
+
         </section>   
-                
+
     </body>
 </html>

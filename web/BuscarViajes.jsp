@@ -8,13 +8,13 @@
 <%@page import="java.sql.Date"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="packServlets.Viaje"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
 
-    <%
-        String avisoReserva;
+    <%        
         if (request.getSession().getAttribute("email") != null) {
             out.println("<script>");
             out.println("window.onload = function (){    limpiar();};function limpiar() {    $('a').remove('#4'); }");
@@ -212,6 +212,7 @@
 
         <section id="form-box">   
             <%
+                String avisoReserva;
                 avisoReserva = (String) request.getAttribute("avisoReserva");
                 if (avisoReserva == null)
                     avisoReserva = "";

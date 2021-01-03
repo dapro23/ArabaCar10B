@@ -80,7 +80,7 @@
         <header>
             <div class="container">
                 <div id="branding">
-                    <h1> <span class="highlight">ArabaCar</span> Eliminar Reserva</h1>
+                    <h1> <span class="highlight">ArabaCar</span> Eliminar Reserva Pasajero</h1>
                 </div>
                 <nav>
                     <ul>

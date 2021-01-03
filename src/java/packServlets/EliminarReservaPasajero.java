@@ -46,6 +46,8 @@ public class EliminarReservaPasajero extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        response.setContentType("text/html;charset=UTF-8");
 
         String id = request.getParameter("idviaje");
         String email = request.getParameter("email");
