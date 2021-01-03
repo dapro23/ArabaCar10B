@@ -165,9 +165,9 @@
                                 String telefonoc = v.getConductor();
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
-                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                String fecha = v.getFecha();
                                 //LocalDateTime fecha = v.getFecha();
-                                String fecha2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha2());
+                                String fecha2 = v.getFecha2();
                                 //LocalDateTime fecha2 = v.getFecha2();
                                 double precio = v.getPrecio();
                     %>
@@ -230,8 +230,8 @@
                                 //LocalDateTime fecha = v.getFecha();
                                 //LocalDateTime fecha2 = v.getFecha2();
                                 
-                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
-                                String fecha2 = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha2());
+                                String fecha = v.getFecha();
+                                String fecha2 = v.getFecha2();
                                 
                                 double precio = v.getPrecio();
                     %>

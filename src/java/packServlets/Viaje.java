@@ -17,24 +17,22 @@ public class Viaje {
     private String destino;
     private LocalDateTime fecha;
     private LocalDateTime fecha2;
+    private String movil;
     private double precio;
-   
- 
-    
+
     //Email y Fecha
     public Viaje(String id, Timestamp fecha) {
-        
+
         this.id = id;
-        this.fecha = fecha.toLocalDateTime();       
-    }
-    
-    public Viaje(String id, String nombre, Timestamp fecha) {        
-        this.id = id;
-        this.nombre = nombre;        
-        this.fecha = fecha.toLocalDateTime();       
+        this.fecha = fecha.toLocalDateTime();
     }
 
-    
+    public Viaje(String id, String nombre, Timestamp fecha) {
+        this.id = id;
+        this.nombre = nombre;
+        this.fecha = fecha.toLocalDateTime();
+    }
+
     //Viaje comun      
     public Viaje(String origen, String destino, Timestamp fecha, double precio) {
 
@@ -44,7 +42,6 @@ public class Viaje {
         this.precio = precio;
     }
 
-    
     //Id => mas viaje comun
     public Viaje(String conductor, String origen, String destino, Timestamp fecha, double precio) {
 
@@ -55,7 +52,6 @@ public class Viaje {
         this.precio = precio;
     }
 
-    
     //String String y lo demas
     public Viaje(String id, String conductor, String origen, String destino, Timestamp fecha, double precio) {
 
@@ -67,7 +63,6 @@ public class Viaje {
         this.precio = precio;
     }
 
-    
     public Viaje(String id, String nombre, String conductor, String origen, String destino, Timestamp fecha, double precio) {
 
         this.id = id;
@@ -78,7 +73,7 @@ public class Viaje {
         this.fecha = fecha.toLocalDateTime();
         this.precio = precio;
     }
-    
+
     public Viaje(String id, String nombre, String conductor, String origen, String destino, Timestamp fecha, Timestamp fecha2, double precio) {
 
         this.id = id;
@@ -91,6 +86,18 @@ public class Viaje {
         this.precio = precio;
     }
     
+    public Viaje(String id, String nombre, String conductor, String movil, String origen, String destino, Timestamp fecha, double precio) {
+
+        this.id = id;
+        this.nombre = nombre;
+        this.conductor = conductor;
+        this.movil = movil;
+        this.origen = origen;
+        this.destino = destino;
+        this.fecha = fecha.toLocalDateTime();        
+        this.precio = precio;
+    }
+
     public String getId() {
         return id;
     }
@@ -98,9 +105,13 @@ public class Viaje {
     public String getConductor() {
         return conductor;
     }
-    
+
     public String getNombre() {
         return nombre;
+    }
+    
+    public String getMovil() {
+        return movil;
     }
 
     public String getOrigen() {
@@ -111,15 +122,60 @@ public class Viaje {
         return destino;
     }
 
-    public LocalDateTime getFecha() {
+    public String getFecha() {
+
+        int año = fecha.getYear();
+        int mes = fecha.getMonthValue();
+        int dia = fecha.getDayOfMonth();
+
+        int horaP = fecha.getHour();
+        horaP = horaP - 1;
+        int minutoP = fecha.getMinute();
+
+        String hora = ""+horaP;
+        String minuto = ""+minutoP;
         
-        return fecha;
+        if (horaP < 10) {
+            hora = "0" + hora;
+        }
+
+        if (minutoP < 10) {
+            minuto = "0" + minuto;
+        }
+
+        //int segundo = fecha.getSecond();
+        String fechaP = dia + "/" + mes + "/" + año + " " + hora + ":" + minuto;
+
+        return fechaP;
     }
 
-    public LocalDateTime getFecha2() {
-        return fecha2;
+    public String getFecha2() {
+
+        int año = fecha.getYear();
+        int mes = fecha.getMonthValue();
+        int dia = fecha.getDayOfMonth();
+
+        int horaP = fecha.getHour();
+        horaP = horaP - 1;
+        int minutoP = fecha.getMinute();
+
+        String hora = ""+horaP;
+        String minuto = ""+minutoP;
+        
+        if (horaP < 10) {
+            hora = "0" + hora;
+        }
+
+        if (minutoP < 10) {
+            minuto = "0" + minuto;
+        }
+
+        //int segundo = fecha.getSecond();
+        String fechaP = dia + "/" + mes + "/" + año + " " + hora + ":" + minuto;
+
+        return fechaP;
     }
-    
+
     public double getPrecio() {
         return precio;
     }

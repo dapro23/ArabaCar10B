@@ -89,13 +89,29 @@
                     <%
                         Calendar fechaC = new GregorianCalendar();
                         int año = fechaC.get(Calendar.YEAR);
-                        int mes = fechaC.get(Calendar.MONTH);
-                        int dia = fechaC.get(Calendar.DAY_OF_MONTH);
-                        mes++;
+                        int mesA = fechaC.get(Calendar.MONTH);
+                        int diaA = fechaC.get(Calendar.DAY_OF_MONTH);
+                        mesA++;
+                        String mes = ""+mesA;
+                        String dia = ""+diaA;
+                        if(mesA < 10){
+                             mes = "0"+mes;
+                        }
+                        
+                        if(diaA < 10){
+                            dia = "0"+dia;                                                
+                        }
+                        
                         String fechaActual = año + "-" + mes + "-" + dia;
-                        System.err.println(fechaActual);
+                        
+                        
+                        int añoB = año + 1; 
+                        String fechaMax = añoB + "-" + mes + "-" + dia;
+                        
+                        System.out.println("fecha actual del sistema: " + fechaMax);    
+
                         String fechaForm = "<label for='Fecha'> Fecha </label>"
-                                + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='2021-12-31' required>";
+                                + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='"+fechaMax+"' >";
                     %>
                     <%=fechaForm%>       
                 </div>
@@ -124,6 +140,7 @@
                             if (request.getSession().getAttribute("email") != null) {
                                 cabecera = "<th>Nombre</th>"
                                         + "<th>Email</th>"
+                                        + "<th>Movil</th>"
                                         + "<th>Origen</th>"
                                         + "<th>Destino</th>"
                                         + "<th>Fecha y Hora</th>"
@@ -155,9 +172,10 @@
                                     String id = v.getId();
                                     String origen = v.getOrigen();
                                     String destino = v.getDestino();
-                                    String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                    String fecha = v.getFecha();
                                     //LocalDateTime fecha = v.getFecha();
                                     //Timestamp fecha = v.getFecha();
+                                    String movil = v.getMovil();
 
                                     double precio = v.getPrecio();
                                     String boton = "<form action='RealizarReserva' onsubmit='{return checkIt(" + id + ");}'>"
@@ -167,6 +185,7 @@
                     <tr>
                         <td><%=nombre%></td>
                         <td><%=email%></td>
+                        <td><%=movil%></td>                        
                         <td><%=origen%></td>
                         <td><%=destino%></td>
                         <td><%=fecha%></td>                        
@@ -185,12 +204,11 @@
                             //Timestamp fecha = v.getFecha();
 
                             //System.out.println(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(v.getFecha()) + " holaa");
-                            String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                            String fecha = v.getFecha();
 
                             double precio = v.getPrecio();
                             String boton = "<form action='RealizarReserva'>"
-                                    + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "' action='BuscarViajes'>apuntarse</Button>"
-                                    + "<label for='botondetalles'> id: " + id + "</label> "
+                                    + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "' action='BuscarViajes'>apuntarse</Button>"                                    
                                     + "</form>";
                     %>
                     <tr>

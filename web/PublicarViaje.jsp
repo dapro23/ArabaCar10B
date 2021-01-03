@@ -50,15 +50,30 @@
                 <div class="formContent">
                     <%
                         Calendar fechaC = new GregorianCalendar();
-
                         int año = fechaC.get(Calendar.YEAR);
-                        int mes = fechaC.get(Calendar.MONTH);
-                        int dia = fechaC.get(Calendar.DAY_OF_MONTH);
-                        mes++;
-                        String fechaActual = año + "-" + mes + "-" + dia;                     
+                        int mesA = fechaC.get(Calendar.MONTH);
+                        int diaA = fechaC.get(Calendar.DAY_OF_MONTH);
+                        mesA++;
+                        String mes = ""+mesA;
+                        String dia = ""+diaA;
+                        if(mesA < 10){
+                             mes = "0"+mes;
+                        }
+                        
+                        if(diaA < 10){
+                            dia = "0"+dia;                                                
+                        }
+                        
+                        String fechaActual = año + "-" + mes + "-" + dia;
+                        
+                        
+                        int añoB = año + 1; 
+                        String fechaMax = añoB + "-" + mes + "-" + dia;
+                        
+                        System.out.println("fecha actual del sistema: " + fechaMax);    
 
                         String fechaForm = "<label for='Fecha'> Fecha </label>"
-                                + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='2021-12-31' >";
+                                + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='"+fechaMax+"' >";
                     %>
                     <%=fechaForm%>       
                 </div>  

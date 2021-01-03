@@ -104,7 +104,7 @@
                                 String origen = v.getOrigen();
                                 String destino = v.getDestino();
                                 //LocalDateTime fecha = v.getFecha();
-                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                String fecha = v.getFecha();
                                 double precio = v.getPrecio();
                                 String boton = "<form action='EliminarViaje' onsubmit='{return checkIt(" + id + ");}'>"
                                         + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "'>Eliminar</Button>"

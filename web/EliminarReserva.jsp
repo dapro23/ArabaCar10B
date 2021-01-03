@@ -132,7 +132,7 @@
                                 String destino = v.getDestino();
                                 //String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
                                 //LocalDateTime fecha = v.getFecha();
-                                String fecha = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                                String fecha = v.getFecha();
                                 //LocalDateTime fecha2 = v.getFecha2();
                                 double precio = v.getPrecio();
 

@@ -132,7 +132,7 @@
                     String idviajeP = v.getConductor();
                     String origen = v.getOrigen();
                     String destino = v.getDestino();
-                    String fechaC = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                    String fechaC = v.getFecha();
                     //LocalDateTime fechaC = v.getFecha();
                     double precio = v.getPrecio();
         %>
@@ -203,7 +203,7 @@
                             rs.next(); 
                             
                             String nombre = rs.getString("nombre");                         
-                            String fechaR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                            String fechaR = v.getFecha();
 
                     %>              
                     <tr>
@@ -243,7 +243,7 @@
                     String idviajeF = v.getConductor();
                     String origen = v.getOrigen();
                     String destino = v.getDestino();
-                    String fechaC = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                    String fechaC = v.getFecha();
                     double precio = v.getPrecio();
         %>
 
@@ -315,7 +315,7 @@
                             rs.next(); 
                             
                             String nombre = rs.getString("nombre");                            
-                            String fechaR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(v.getFecha());
+                            String fechaR = v.getFecha();
 
                     %>              
                     <tr>

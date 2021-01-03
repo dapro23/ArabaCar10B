@@ -121,7 +121,7 @@ public class BuscarViajes extends HttpServlet {
                         PreparedStatement pst2;
                         ResultSet rs2;                      
                                                 
-                        String query2 = "SELECT nombre FROM usuario WHERE email = ?";                                               
+                        String query2 = "SELECT nombre, movil FROM usuario WHERE email = ?";                                               
 
                         pst2 = conn.prepareStatement(query2);
                         
@@ -132,12 +132,15 @@ public class BuscarViajes extends HttpServlet {
                         rs2.next();
                         
                         String nombre = rs2.getString("nombre");
+                        String movil = rs2.getString("movil");
                         
+                        //public Viaje(String id, String nombre, String conductor, String movil, String origen, String destino, Timestamp fecha, double precio) {
                         viajes.add(
                                 new Viaje(
                                         rs.getString("idviaje"),
                                         nombre,
                                         rs.getString("email"),
+                                        movil,
                                         rs.getString("origen"),
                                         rs.getString("destino"),
                                         rs.getTimestamp("fecha"),
