@@ -31,7 +31,7 @@
             <form action="Login" id="formulariologin">
                 <div class="formContent">
                     <label for="email"> Email </label> 
-                    <input type="email" placeholder= "email" id="correo" name="email" required>
+                    <input type="email" placeholder= "email" id="correo" name="email" pattern="(?!.*\.\.)(^[^\.][^@\s]+@[^@\s]+\.[^@\s\.]+$)" required>
                 </div>
                 <div class="formContent">
                     <label for="password"> Password </label> 

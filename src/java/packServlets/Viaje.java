@@ -19,6 +19,7 @@ public class Viaje {
     private LocalDateTime fecha2;
     private String movil;
     private double precio;
+    private String coche;
 
     //Email y Fecha
     public Viaje(String id, Timestamp fecha) {
@@ -97,6 +98,19 @@ public class Viaje {
         this.fecha = fecha.toLocalDateTime();        
         this.precio = precio;
     }
+    
+    public Viaje(String id, String nombre, String conductor, String movil, String coche,String origen, String destino, Timestamp fecha, double precio) {
+
+        this.id = id;
+        this.nombre = nombre;
+        this.conductor = conductor;
+        this.movil = movil;
+        this.coche = coche;
+        this.origen = origen;
+        this.destino = destino;
+        this.fecha = fecha.toLocalDateTime();        
+        this.precio = precio;
+    }
 
     public String getId() {
         return id;
@@ -113,6 +127,10 @@ public class Viaje {
     public String getMovil() {
         return movil;
     }
+    
+    public String getCoche() {        
+        return coche;
+    }
 
     public String getOrigen() {
         return origen;
@@ -123,14 +141,18 @@ public class Viaje {
     }
 
     public String getFecha() {
+        
+        LocalDateTime fechaA = this.fecha;
+        
+        fechaA = fechaA.plusHours(-1);
 
-        int año = fecha.getYear();
-        int mes = fecha.getMonthValue();
-        int dia = fecha.getDayOfMonth();
+        int año = fechaA.getYear();
+        int mes = fechaA.getMonthValue();
+        int dia = fechaA.getDayOfMonth();
 
-        int horaP = fecha.getHour();
-        horaP = horaP - 1;
-        int minutoP = fecha.getMinute();
+        int horaP = fechaA.getHour();
+        //horaP = horaP - 1;
+        int minutoP = fechaA.getMinute();
 
         String hora = ""+horaP;
         String minuto = ""+minutoP;
@@ -151,13 +173,17 @@ public class Viaje {
 
     public String getFecha2() {
 
-        int año = fecha.getYear();
-        int mes = fecha.getMonthValue();
-        int dia = fecha.getDayOfMonth();
+        LocalDateTime fechaA = this.fecha2;
+        
+        fechaA = fechaA.plusHours(-1);
 
-        int horaP = fecha.getHour();
-        horaP = horaP - 1;
-        int minutoP = fecha.getMinute();
+        int año = fechaA.getYear();
+        int mes = fechaA.getMonthValue();
+        int dia = fechaA.getDayOfMonth();
+
+        int horaP = fechaA.getHour();
+        //horaP = horaP - 1;
+        int minutoP = fechaA.getMinute();
 
         String hora = ""+horaP;
         String minuto = ""+minutoP;

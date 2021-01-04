@@ -30,8 +30,8 @@ import packUtilidades.BD;
 public class PublicarViaje extends HttpServlet {
 
     private Connection conn;
-    private PreparedStatement pst; 
-    
+    private PreparedStatement pst;
+
     @Override
     public void init(ServletConfig config) throws ServletException {
 
@@ -48,16 +48,19 @@ public class PublicarViaje extends HttpServlet {
 
             Statement stmt = conn.createStatement();            
 
-            String fecha2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH").format(fecha);
+            String fecha1;
+            String fecha2;
             
-            //No deja publicar un viaje si ya existe un viaje ese mismo dia en el rango de la hora determinado
-            String query = "SELECT * FROM viaje WHERE email = '"+  email +"' AND origen = '"+origen+"' AND destino = '"+destino+"' "
-                    + "AND fecha LIKE '"+fecha2+":%'";
+            fecha1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(fecha.plusHours(-1));
+            fecha2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").format(fecha.plusHours(+1));  
+                       
+            //No deja publicar un viaje si ya existe un viaje en el mismo rango de 2 horas
+            String query = "SELECT * FROM viaje WHERE email = '" + email + "' AND fecha BETWEEN '" + fecha1 +"' AND '" + fecha2 +"';";
 
             ResultSet rs2 = stmt.executeQuery(query);
-                      
+
             System.out.println(query);
-            
+
             if (rs2.next()) {
                 num = 1;
                 System.out.println("ENCONTRADO TRUE");
@@ -81,7 +84,7 @@ public class PublicarViaje extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         response.setContentType("text/html;charset=UTF-8");
 
         HttpSession s = request.getSession();
@@ -92,9 +95,9 @@ public class PublicarViaje extends HttpServlet {
 
         String fecha = request.getParameter("fecha");
         String hora = request.getParameter("hora");
-       
+
         fecha = fecha + " " + hora;
-        
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(fecha, formatter);
 
@@ -111,7 +114,7 @@ public class PublicarViaje extends HttpServlet {
             request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
 
         } else if (a == -1) {
-           
+
             request.setAttribute("Aviso", "Error en la comprobacion de duplicidad");
             request.getRequestDispatcher("PublicarViaje.jsp").forward(request, response);
 

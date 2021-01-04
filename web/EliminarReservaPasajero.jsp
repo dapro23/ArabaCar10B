@@ -1,4 +1,7 @@
 
+<%@page import="java.util.Base64"%>
+<%@page import="java.sql.Blob"%>
+<%@page import="java.sql.Statement"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.Timestamp"%>
@@ -57,6 +60,42 @@
 
 
     %>
+    
+    <%        
+        String n = "";
+        String imgDataBase64 = "";
+        try {
+
+            Statement stName;
+            ResultSet rsName;
+
+            System.out.println("Iniciando el JSP");
+            conn = BD.getConexion();
+
+            String e = (String) s.getAttribute("email");
+
+            stName = conn.createStatement();
+            rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+            rsName.next();
+
+            n = rsName.getString("nombre");
+            n = n;
+            //System.out.println("Bienvenido/a " + n);
+            //el nombre se mostrará en el label que viene despues
+            //objeto Blob recuperado de la BD
+            Blob image = rsName.getBlob("foto");
+            byte[] imgData = null;
+            imgData = image.getBytes(1, (int) image.length());
+            imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en la consulta!");
+        }
+
+
+    %>
+    
     <script>
         function checkIt(id) {           
 
@@ -90,7 +129,7 @@
             </div>
         </header>
         <section id="form-box">
-            <b>Estos son todos los viajes que tienes pendientes de hacer y las personas que se han apuntado a esos viajes</b>
+            <b><%=n%>, estos son todos los viajes que tienes pendientes de hacer y las personas que se han apuntado a esos viajes</b>
         </section>
 
         <%            

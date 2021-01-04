@@ -95,6 +95,7 @@
                     %>
                     <li><h1 id = "usuario"> <%=n%> </h1></li> 
                     <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
+                    
                     </li>
                 </div>
                 <nav>
@@ -126,7 +127,8 @@
                     </select>
                 </div>
                 <div class ="Aviso">
-                    <%                        String aviso = (String) request.getAttribute("Aviso");
+                    <%                        
+                        String aviso = (String) request.getAttribute("AvisoOD");
                         if (aviso == null)
                             aviso = "";
                     %>
@@ -191,7 +193,8 @@
                                         + "<th>Origen</th>"
                                         + "<th>Destino</th>"
                                         + "<th>Fecha y Hora</th>"
-                                        + "<th>Precio</th>";
+                                        + "<th>Precio</th>"
+                                        + "<th>Coche</th>";
                             } else {
                                 cabecera = "<th>Origen</th>"
                                         + "<th>Destino</th>"
@@ -207,7 +210,7 @@
                     <%
                         ArrayList<Viaje> viajes = (ArrayList<Viaje>) request.getAttribute("viajes");
                         if (viajes == null) {
-                            //request.setAttribute("avisoReserva", "No hay viajes para mostrar!");
+                            //request.setAttribute("avisoReserva", "Esperando..");
 
                         } else {//Esta logueado el usuario*****************************                            
                             if (request.getSession().getAttribute("email") != null) {
@@ -223,7 +226,8 @@
                                     //LocalDateTime fecha = v.getFecha();
                                     //Timestamp fecha = v.getFecha();
                                     String movil = v.getMovil();
-
+                                    String coche = v.getCoche();
+                                    
                                     double precio = v.getPrecio();
                                     String boton = "<form action='RealizarReserva' onsubmit='{return checkIt(" + id + ");}'>"
                                             + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "' action='BuscarViajes'>apuntarse</Button>"
@@ -237,6 +241,7 @@
                         <td><%=destino%></td>
                         <td><%=fecha%></td>                        
                         <td><%=precio%></td>
+                        <td><%=coche%></td>
                         <td><%=boton%></td>                
                     </tr>     
                     <%

@@ -1,3 +1,6 @@
+<%@page import="java.util.Base64"%>
+<%@page import="java.sql.Blob"%>
+<%@page import="java.sql.Statement"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.sql.Timestamp"%>
@@ -13,8 +16,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <%        
-
+    <%
         HttpSession s = request.getSession();
         String email = (String) s.getAttribute("email");
 
@@ -22,10 +24,9 @@
         ArrayList<Viaje> viajesFuturos = new ArrayList<>();
 
         String mensaje = "Fecha actual: " + DateTimeFormatter.ofPattern("dd/MM/yyyy").format(LocalDate.now());
-
+        Connection conn = BD.getConexion();
         try {
-            Connection conn = BD.getConexion();        
-                                                                                                                                                                                                                                    
+
             String query1 = "SELECT R.fecha AS fechaReserva, V.idviaje, V.email AS emailConductor, V.origen, V.destino, V.fecha AS fechaViaje, V.precio FROM reservaviaje R, viaje V WHERE R.email = ? AND R.idviaje = V.idviaje AND V.fecha < current_date() order by R.fecha;";
 
             PreparedStatement pst1 = conn.prepareStatement(query1);
@@ -48,7 +49,7 @@
                 rs3 = pst3.executeQuery();
 
                 rs3.next();
-                
+
                 //crear un arraylist de viajes
                 viajesPasados.add(
                         new Viaje(
@@ -56,12 +57,12 @@
                                 rs3.getString("email"),
                                 rs3.getString("movil"),
                                 rs1.getString("origen"),
-                                rs1.getString("destino"),                                 
+                                rs1.getString("destino"),
                                 rs1.getTimestamp("fechaViaje"),//fecha
                                 rs1.getTimestamp("fechaReserva"),//fecha2
                                 rs1.getDouble("precio")
                         )
-                );                
+                );
 
             }
 
@@ -74,7 +75,7 @@
             ResultSet rs2 = pst2.executeQuery();
 
             while (rs2.next()) {
-                
+
                 PreparedStatement pst4;
                 ResultSet rs4;
 
@@ -95,14 +96,49 @@
                                 rs4.getString("email"),
                                 rs4.getString("movil"),
                                 rs2.getString("origen"),
-                                rs2.getString("destino"),                                 
+                                rs2.getString("destino"),
                                 rs2.getTimestamp("fechaViaje"),//fecha
                                 rs2.getTimestamp("fechaReserva"),//fecha2
                                 rs2.getDouble("precio")
                         )
-                );                
+                );
 
             }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en la consulta!");
+        }
+
+
+    %>
+
+    <%        
+        String n = "";
+        String imgDataBase64 = "";
+        try {
+
+            Statement stName;
+            ResultSet rsName;
+
+            System.out.println("Iniciando el JSP");
+            conn = BD.getConexion();
+
+            String e = (String) s.getAttribute("email");
+
+            stName = conn.createStatement();
+            rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+            rsName.next();
+
+            n = rsName.getString("nombre");
+            n = n;
+            //System.out.println("Bienvenido/a " + n);
+            //el nombre se mostrará en el label que viene despues
+            //objeto Blob recuperado de la BD
+            Blob image = rsName.getBlob("foto");
+            byte[] imgData = null;
+            imgData = image.getBytes(1, (int) image.length());
+            imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,7 +169,7 @@
             </div>
         </header>      
         <section id="form-box">
-            <b>Estas son todas las reservas que has realizado</b>
+            <b><%=n%>, estas son todas las reservas que has realizado</b>
         </section>
 
         <section id="dataWrapper" >
@@ -229,10 +265,10 @@
                                 String destino = v.getDestino();
                                 //LocalDateTime fecha = v.getFecha();
                                 //LocalDateTime fecha2 = v.getFecha2();
-                                
+
                                 String fecha = v.getFecha();
                                 String fecha2 = v.getFecha2();
-                                
+
                                 double precio = v.getPrecio();
                     %>
 

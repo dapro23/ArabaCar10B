@@ -40,7 +40,7 @@ public class BuscarViajes extends HttpServlet {
         
         if (origen.equals(destino)) {
 
-            request.setAttribute("Aviso", "Origen y destino no pueden ser iguales");
+            request.setAttribute("AvisoOD", "Origen y destino no pueden ser iguales");
 
         } else if (fecha.length() == 0) {
 
@@ -68,11 +68,16 @@ public class BuscarViajes extends HttpServlet {
                     pst.setString(2, destino);
                     pst.setString(3, fecha);
 
-                    rs = pst.executeQuery();
-
+                    rs = pst.executeQuery();                 
+                    
                     ArrayList<Viaje> viajes = new ArrayList<>();
+                    
+                    int num = 0;
 
-                    while (rs.next()) {                        
+                    while (rs.next()) {  
+                        
+                        num = num + 1;
+                        
                         viajes.add(
                                 new Viaje(
                                         rs.getString("idviaje"),
@@ -84,6 +89,9 @@ public class BuscarViajes extends HttpServlet {
                         );
 
                     }
+                    
+                    if ( num == 0 )
+                        request.setAttribute("avisoReserva", "No hay viajes que mostrar");
 
                     //guardar en el atributo "viajes" el arrayList de viajes
                     //que cumplen el filtro
@@ -112,16 +120,22 @@ public class BuscarViajes extends HttpServlet {
                     pst.setString(4, email);
                     pst.setString(5, email);
 
-                    rs = pst.executeQuery();
-
+                    rs = pst.executeQuery(); 
+                    
+                    
+                    
                     ArrayList<Viaje> viajes = new ArrayList<>();
-
+                    
+                    int num = 0;
+                    
                     while (rs.next()) {
+                        
+                        num = num+1;
                         
                         PreparedStatement pst2;
                         ResultSet rs2;                      
                                                 
-                        String query2 = "SELECT nombre, movil FROM usuario WHERE email = ?";                                               
+                        String query2 = "SELECT nombre, movil, coche FROM usuario WHERE email = ?";                                               
 
                         pst2 = conn.prepareStatement(query2);
                         
@@ -133,6 +147,7 @@ public class BuscarViajes extends HttpServlet {
                         
                         String nombre = rs2.getString("nombre");
                         String movil = rs2.getString("movil");
+                        String coche = rs2.getString("coche");
                         
                         //public Viaje(String id, String nombre, String conductor, String movil, String origen, String destino, Timestamp fecha, double precio) {
                         viajes.add(
@@ -141,6 +156,7 @@ public class BuscarViajes extends HttpServlet {
                                         nombre,
                                         rs.getString("email"),
                                         movil,
+                                        coche,
                                         rs.getString("origen"),
                                         rs.getString("destino"),
                                         rs.getTimestamp("fecha"),
@@ -149,6 +165,9 @@ public class BuscarViajes extends HttpServlet {
                         );
 
                     }
+                    
+                    if ( num == 0 )
+                        request.setAttribute("avisoReserva", "No hay viajes que mostrar");
                     
                     request.setAttribute("viajes", viajes);
 

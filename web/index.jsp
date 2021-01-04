@@ -52,6 +52,46 @@
         }
     </script>  
 
+    <%
+        Connection conn;
+        String n = "";
+        String imgDataBase64 = "";
+        try {
+
+            Statement stName;
+            ResultSet rsName;
+
+            System.out.println("Iniciando el JSP");
+            conn = BD.getConexion();
+
+            HttpSession s = request.getSession();
+            String e = (String) s.getAttribute("email");
+
+            if (s.getAttribute("email") != null) {
+
+                stName = conn.createStatement();
+                rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+                rsName.next();
+
+                n = rsName.getString("nombre");
+                n = "Hola " + n;
+                //System.out.println("Bienvenido/a " + n);
+                //el nombre se mostrará en el label que viene despues
+                //objeto Blob recuperado de la BD
+                Blob image = rsName.getBlob("foto");
+                byte[] imgData = null;
+                imgData = image.getBytes(1, (int) image.length());
+                imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en la consulta!");
+        }
+
+
+    %>
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
@@ -62,8 +102,6 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">    
         <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
         <script src="js/dropdown.js" type="text/javascript"></script>
-
-
     </head>
     <body>    
 
@@ -72,49 +110,8 @@
                 <div class="container">
                     <li>
                     <li><h1 >ArabaCar</h1></li>
-
-                    <%
-                        Connection conn;
-                        String n = "";
-                        String imgDataBase64 = "";
-                        try {
-                            
-                            Statement stName;
-                            ResultSet rsName;
-
-                            System.out.println("Iniciando el JSP");
-                            conn = BD.getConexion();
-
-                            HttpSession s = request.getSession();
-                            String e = (String) s.getAttribute("email");
-
-                            if (s.getAttribute("email") != null) {
-
-                                stName = conn.createStatement();
-                                rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
-                                rsName.next();
-
-                                n = rsName.getString("nombre");
-                                n = "Hola " + n;
-                                //System.out.println("Bienvenido/a " + n);
-                                //el nombre se mostrará en el label que viene despues
-                                //objeto Blob recuperado de la BD
-                                Blob image = rsName.getBlob("foto");
-                                byte[] imgData = null;
-                                imgData = image.getBytes(1, (int) image.length());
-                                imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
-                            }
-
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                            System.err.println("Error en la consulta!");
-                        }
-
-
-                    %>
                     <li><h1 id = "usuario"> <%=n%> </h1></li> 
                     <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
-                    
                     
                     </li>
                 </div>

@@ -1,4 +1,7 @@
 
+<%@page import="java.util.Base64"%>
+<%@page import="java.sql.Blob"%>
+<%@page import="java.sql.Statement"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.time.LocalDate"%>
@@ -42,7 +45,7 @@
             rs1 = pst1.executeQuery();
 
             while (rs1.next()) {
-                
+
                 viajesPasados.add(
                         new Viaje(
                                 rs1.getString("idviaje"),
@@ -95,6 +98,43 @@
 
     %>   
 
+    <%        
+        String n = "";
+        String imgDataBase64 = "";
+        try {
+
+            Statement stName;
+            ResultSet rsName;
+
+            System.out.println("Iniciando el JSP");
+            conn = BD.getConexion();
+            
+            String e = (String) s.getAttribute("email");
+
+            if (s.getAttribute("email") != null) {
+
+                stName = conn.createStatement();
+                rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+                rsName.next();
+
+                n = rsName.getString("nombre");
+                n = n;
+                //System.out.println("Bienvenido/a " + n);
+                //el nombre se mostrará en el label que viene despues
+                //objeto Blob recuperado de la BD
+                Blob image = rsName.getBlob("foto");
+                byte[] imgData = null;
+                imgData = image.getBytes(1, (int) image.length());
+                imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en la consulta!");
+        }
+
+
+    %>
 
     <head>
         <meta charset="utf-8">
@@ -121,7 +161,7 @@
             </div>
         </header>
         <section id="form-box">
-            <b>A continuacion saldran todos los viajes publicados que tienes</b>
+            <b><%=n%>, a continuacion saldran todos los viajes publicados que tienes</b>
         </section>
 
         <%            if (false) {
@@ -173,7 +213,7 @@
 
                             pst3.setString(1, idviajeP);
 
-                            rs3 = pst3.executeQuery();                            
+                            rs3 = pst3.executeQuery();
                             while (rs3.next()) {
 
                                 reservas.add(
@@ -200,9 +240,9 @@
                             pst = conn.prepareStatement(query3);
                             pst.setString(1, emailP);
                             rs = pst.executeQuery();
-                            rs.next(); 
-                            
-                            String nombre = rs.getString("nombre");                         
+                            rs.next();
+
+                            String nombre = rs.getString("nombre");
                             String fechaR = v.getFecha();
 
                     %>              
@@ -285,7 +325,7 @@
                             pst4.setString(1, idviajeF);
 
                             rs4 = pst4.executeQuery();
-                            
+
                             while (rs4.next()) {
 
                                 reservas.add(
@@ -312,9 +352,9 @@
                             pst = conn.prepareStatement(query3);
                             pst.setString(1, emailP);
                             rs = pst.executeQuery();
-                            rs.next(); 
-                            
-                            String nombre = rs.getString("nombre");                            
+                            rs.next();
+
+                            String nombre = rs.getString("nombre");
                             String fechaR = v.getFecha();
 
                     %>              

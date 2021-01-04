@@ -28,7 +28,7 @@
 
                 <div class="formContent">
                     <label for="Nombre"> Nombre </label> 
-                    <input type="text" placeholder= "nombre" id="nombre" name="nombre" pattern="[a-zA-Z]{4,}" required>
+                    <input type="text" placeholder= "nombre" id="nombre" name="nombre" pattern="[a-zA-Z]{3,}" required>
                 </div>
 
                 <div class="formContent">

@@ -11,6 +11,47 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+
+    <%
+        Connection conn;
+        String n = "";
+        String imgDataBase64 = "";
+        try {
+
+            Statement stName;
+            ResultSet rsName;
+
+            System.out.println("Iniciando el JSP");
+            conn = BD.getConexion();
+
+            HttpSession s = request.getSession();
+            String e = (String) s.getAttribute("email");
+
+            if (s.getAttribute("email") != null) {
+
+                stName = conn.createStatement();
+                rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+                rsName.next();
+
+                n = rsName.getString("nombre");
+                n = n;
+                //System.out.println("Bienvenido/a " + n);
+                //el nombre se mostrará en el label que viene despues
+                //objeto Blob recuperado de la BD
+                Blob image = rsName.getBlob("foto");
+                byte[] imgData = null;
+                imgData = image.getBytes(1, (int) image.length());
+                imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error en la consulta!");
+        }
+
+
+    %> 
+
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
@@ -22,61 +63,22 @@
     </head>
     <body>
         <header>
-            <div class="container">
-                <div id="branding">
+            <div id="branding">
+                <div class="container">
                     <li>
+                    <li><h1> <span class="highlight">ArabaCar</span> Publicar Viaje</h1></li>
+                    <li><h1 id = "usuario"><%=n%> </h1></li> 
+                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">                      
 
-                        <li><h1> <span class="highlight">ArabaCar</span> Publicar Viaje</h1></li>
-                        <%
-                            Connection conn;
-                            String n = "";
-                            String imgDataBase64 = "";
-                            try {
-
-                                Statement stName;
-                                ResultSet rsName;
-
-                                System.out.println("Iniciando el JSP");
-                                conn = BD.getConexion();
-
-                                HttpSession s = request.getSession();
-                                String e = (String) s.getAttribute("email");
-
-                                if (s.getAttribute("email") != null) {
-
-                                    stName = conn.createStatement();
-                                    rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
-                                    rsName.next();
-
-                                    n = rsName.getString("nombre");
-                                    n = n;
-                                    //System.out.println("Bienvenido/a " + n);
-                                    //el nombre se mostrará en el label que viene despues
-                                    //objeto Blob recuperado de la BD
-                                    Blob image = rsName.getBlob("foto");
-                                    byte[] imgData = null;
-                                    imgData = image.getBytes(1, (int) image.length());
-                                    imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
-                                }
-
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                                System.err.println("Error en la consulta!");
-                            }
-
-
-                        %>
-                    <li><h1 id = "usuario"> <%=n%> </h1></li> 
-                    <li><img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto"></li>        
-                    
                     </li>
                 </div>
-                <nav>
-                    <ul>
-                        <li><a href="index.jsp">Inicio</a></li>
-                    </ul>
-                </nav>
             </div>
+            <nav>
+                <ul>
+                    <li><a href="index.jsp">Inicio</a></li>
+                </ul>
+            </nav>
+
         </header>
         <section id="form-box">
             <b>Introduce la informacion del viaje</b>
@@ -136,7 +138,7 @@
 
                 <div class="formContent">
                     <label for="precio"> Precio </label>
-                    <input  class = "datoPrecio" type="number" id="precio" name="precio" min="0" value="0.00" step="0.50" onchange="(function (el) {
+                    <input  class = "datoPrecio" type="number" id="precio" name="precio" min="1" max="500" value="0.00" step="0.50" onchange="(function (el) {
                                 el.value = parseFloat(el.value).toFixed(2);
                             })(this)">
                 </div>
