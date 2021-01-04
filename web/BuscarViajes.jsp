@@ -1,4 +1,11 @@
 
+<%@page import="java.util.Base64"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.Blob"%>
+<%@page import="packUtilidades.BD"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="java.time.format.DateTimeFormatter"%>
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.util.GregorianCalendar"%>
@@ -47,7 +54,47 @@
                 <div id="branding">
                     <li>
                     <li><h1> <span class="highlight">ArabaCar</span> Viajes</h1></li>
-                    <li><img src="img/viaje.png" style="max-width: 90px; max-height: 90px; border-radius: 20px;"></li>
+                    <%
+                        Connection conn;
+                        String n = "";
+                        String imgDataBase64 = "";
+                        try {
+                            
+                            Statement stName;
+                            ResultSet rsName;
+
+                            System.out.println("Iniciando el JSP");
+                            conn = BD.getConexion();
+
+                            HttpSession s = request.getSession();
+                            String e = (String) s.getAttribute("email");
+
+                            if (s.getAttribute("email") != null) {
+
+                                stName = conn.createStatement();
+                                rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+                                rsName.next();
+
+                                n = rsName.getString("nombre");
+                                n = n;
+                                //System.out.println("Bienvenido/a " + n);
+                                //el nombre se mostrará en el label que viene despues
+                                //objeto Blob recuperado de la BD
+                                Blob image = rsName.getBlob("foto");
+                                byte[] imgData = null;
+                                imgData = image.getBytes(1, (int) image.length());
+                                imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+                            }
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            System.err.println("Error en la consulta!");
+                        }
+
+
+                    %>
+                    <li><h1 id = "usuario"> <%=n%> </h1></li> 
+                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
                     </li>
                 </div>
                 <nav>
@@ -58,7 +105,7 @@
                 </nav>
             </div>
         </header>
-        <section id="form-box">
+        <section id="form-box">           
             <b>Introduce los detalles del viaje que deseas</b><br>
             <c>Se mostraran los viajes con fecha posterior a la indicada</c>
             <form id="myform" action="BuscarViajes" method = "GET">

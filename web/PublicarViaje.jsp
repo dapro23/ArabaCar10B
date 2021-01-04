@@ -1,4 +1,11 @@
 
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Connection"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="packUtilidades.BD"%>
+<%@page import="java.sql.Blob"%>
+<%@page import="java.util.Base64"%>
 <%@page import="java.util.GregorianCalendar"%>
 <%@page import="java.util.Calendar"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -17,7 +24,52 @@
         <header>
             <div class="container">
                 <div id="branding">
-                    <h1> <span class="highlight">ArabaCar</span> Publicar Viaje</h1>
+                    <li>
+
+                        <li><h1> <span class="highlight">ArabaCar</span> Publicar Viaje</h1></li>
+                        <%
+                            Connection conn;
+                            String n = "";
+                            String imgDataBase64 = "";
+                            try {
+
+                                Statement stName;
+                                ResultSet rsName;
+
+                                System.out.println("Iniciando el JSP");
+                                conn = BD.getConexion();
+
+                                HttpSession s = request.getSession();
+                                String e = (String) s.getAttribute("email");
+
+                                if (s.getAttribute("email") != null) {
+
+                                    stName = conn.createStatement();
+                                    rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+                                    rsName.next();
+
+                                    n = rsName.getString("nombre");
+                                    n = n;
+                                    //System.out.println("Bienvenido/a " + n);
+                                    //el nombre se mostrará en el label que viene despues
+                                    //objeto Blob recuperado de la BD
+                                    Blob image = rsName.getBlob("foto");
+                                    byte[] imgData = null;
+                                    imgData = image.getBytes(1, (int) image.length());
+                                    imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
+                                }
+
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                System.err.println("Error en la consulta!");
+                            }
+
+
+                        %>
+                    <li><h1 id = "usuario"> <%=n%> </h1></li> 
+                    <li><img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto"></li>        
+                    
+                    </li>
                 </div>
                 <nav>
                     <ul>
@@ -54,26 +106,25 @@
                         int mesA = fechaC.get(Calendar.MONTH);
                         int diaA = fechaC.get(Calendar.DAY_OF_MONTH);
                         mesA++;
-                        String mes = ""+mesA;
-                        String dia = ""+diaA;
-                        if(mesA < 10){
-                             mes = "0"+mes;
+                        String mes = "" + mesA;
+                        String dia = "" + diaA;
+                        if (mesA < 10) {
+                            mes = "0" + mes;
                         }
-                        
-                        if(diaA < 10){
-                            dia = "0"+dia;                                                
+
+                        if (diaA < 10) {
+                            dia = "0" + dia;
                         }
-                        
+
                         String fechaActual = año + "-" + mes + "-" + dia;
-                        
-                        
-                        int añoB = año + 1; 
+
+                        int añoB = año + 1;
                         String fechaMax = añoB + "-" + mes + "-" + dia;
-                        
-                        System.out.println("fecha actual del sistema: " + fechaMax);    
+
+                        System.out.println("fecha actual del sistema: " + fechaMax);
 
                         String fechaForm = "<label for='Fecha'> Fecha </label>"
-                                + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='"+fechaMax+"' >";
+                                + "<input class='datoFecha' type='date' id='fecha' name='fecha'  min='" + fechaActual + "' max='" + fechaMax + "' >";
                     %>
                     <%=fechaForm%>       
                 </div>  
@@ -106,6 +157,6 @@
             %>
             <label name="AvisoFecha" style="color: white"> <%=usuario%> </label>
         </section>
-        
+
     </body>
 </html>

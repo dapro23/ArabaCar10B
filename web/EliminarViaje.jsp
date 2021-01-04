@@ -96,7 +96,8 @@
                     </thead>
 
                     <tbody id="elementsList"></tbody>
-                    <%                        if (false) {
+                    <%                        
+                        if (false) {
                             System.out.println("No hay viajes para mostrar!");
                         } else {
                             for (Viaje v : viajes) {

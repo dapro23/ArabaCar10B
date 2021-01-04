@@ -74,12 +74,13 @@
                     <li><h1 >ArabaCar</h1></li>
 
                     <%
+                        Connection conn;
                         String n = "";
                         String imgDataBase64 = "";
                         try {
-                            Connection conn;
-                            Statement st;
-                            ResultSet rs;
+                            
+                            Statement stName;
+                            ResultSet rsName;
 
                             System.out.println("Iniciando el JSP");
                             conn = BD.getConexion();
@@ -89,16 +90,16 @@
 
                             if (s.getAttribute("email") != null) {
 
-                                st = conn.createStatement();
-                                rs = st.executeQuery("select * from usuario where email = '" + e + "'");
-                                rs.next();
+                                stName = conn.createStatement();
+                                rsName = stName.executeQuery("select * from usuario where email = '" + e + "'");
+                                rsName.next();
 
-                                n = rs.getString("nombre");
+                                n = rsName.getString("nombre");
                                 n = "Hola " + n;
                                 //System.out.println("Bienvenido/a " + n);
                                 //el nombre se mostrará en el label que viene despues
                                 //objeto Blob recuperado de la BD
-                                Blob image = rs.getBlob("foto");
+                                Blob image = rsName.getBlob("foto");
                                 byte[] imgData = null;
                                 imgData = image.getBytes(1, (int) image.length());
                                 imgDataBase64 = new String(Base64.getEncoder().encode(imgData));
