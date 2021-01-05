@@ -129,7 +129,11 @@
         <header>
             <div class="container">
                 <div id="branding">
+                    <li>
                     <h1> <span class="highlight">ArabaCar</span> Desapuntarse de un Viaje</h1>
+                    <li><h1 id = "usuario" style="padding: 10px"> <%=n%> </h1></li> 
+                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
+                    </li>
                 </div>
                 <nav>
                     <ul>
@@ -139,7 +143,7 @@
             </div>
         </header>
         <section id="form-box">
-            <b><%=n%>, estas son todas las reservas que has realizado</b>
+            <b><%=n%>, estas son todas las reservas que has realizado, elige la que desees eliminar</b>
         </section>
 
         <section id="dataWrapper" >
@@ -151,7 +155,7 @@
                             <th>Email</th>
                             <th>Origen</th>
                             <th>Destino</th>
-                            <th>Fecha </th>                          
+                            <th>Fecha Viaje</th>                          
                             <th>Precio </th>
 
                         </tr>
@@ -173,7 +177,8 @@
                                 //LocalDateTime fecha = v.getFecha();
                                 String fecha = v.getFecha();
                                 //LocalDateTime fecha2 = v.getFecha2();
-                                double precio = v.getPrecio();
+                                double precioP = v.getPrecio();
+                                String precio = precioP + " €";
 
                                 String boton = "<form action='EliminarReserva' onsubmit='{return checkIt(" + idViaje + ");}'>"
                                         + "<Button id = 'botondetalles' name = 'idviaje' value='" + idViaje + "' action='BuscarViajes'>Eliminar</Button>"

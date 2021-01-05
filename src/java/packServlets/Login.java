@@ -96,9 +96,10 @@ public class Login extends HttpServlet {
                             s.setAttribute("email", email);
                             s.setAttribute("password", password);
 
-                            String coche = rs.getString("coche");
-                            if (coche != null) {
-                                s.setAttribute("coche", coche);
+                            //cuidado si el dato coche en la base de datos es null
+                            if (!rs.getString("coche").equals("")) {
+                                s.setAttribute("coche", rs.getString("coche"));
+                                System.out.println("Puta:" + rs.getString("coche") + ":");
                             }
 
                             response.sendRedirect("index.jsp");

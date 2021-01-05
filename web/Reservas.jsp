@@ -159,7 +159,11 @@
         <header>
             <div class="container">
                 <div id="branding">
+                    <li>
                     <h1> <span class="highlight">ArabaCar</span> Mi Reservas</h1>
+                    <li><h1 id = "usuario" style="padding: 10px"> <%=n%> </h1></li> 
+                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
+                    </li>
                 </div>
                 <nav>
                     <ul>
@@ -205,7 +209,8 @@
                                 //LocalDateTime fecha = v.getFecha();
                                 String fecha2 = v.getFecha2();
                                 //LocalDateTime fecha2 = v.getFecha2();
-                                double precio = v.getPrecio();
+                                double precioP = v.getPrecio();
+                                String precio = precioP + " €";
                     %>
 
                     <tr>
@@ -245,7 +250,7 @@
                             <th>Telefono</th>
                             <th>Origen</th>
                             <th>Destino</th>
-                            <th>Fecha del viaje</th>                          
+                            <th>Fecha viaje</th>                          
                             <th>Precio </th>
 
                         </tr>
@@ -269,7 +274,8 @@
                                 String fecha = v.getFecha();
                                 String fecha2 = v.getFecha2();
 
-                                double precio = v.getPrecio();
+                                double precioP = v.getPrecio();
+                                String precio = precioP + " €";
                     %>
 
                     <tr>

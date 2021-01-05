@@ -98,8 +98,7 @@
 
     %>   
 
-    <%        
-        String n = "";
+    <%        String n = "";
         String imgDataBase64 = "";
         try {
 
@@ -108,7 +107,7 @@
 
             System.out.println("Iniciando el JSP");
             conn = BD.getConexion();
-            
+
             String e = (String) s.getAttribute("email");
 
             if (s.getAttribute("email") != null) {
@@ -151,7 +150,11 @@
         <header>
             <div class="container">
                 <div id="branding">
-                    <h1> <span class="highlight">ArabaCar</span> Mis Viajes Publicados</h1>
+                    <li>
+                        <h1> <span class="highlight">ArabaCar</span> Mis Viajes Publicados</h1>
+                    <li><h1 id = "usuario" style="padding: 10px"> <%=n%> </h1></li> 
+                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
+                    </li>
                 </div>
                 <nav>
                     <ul>
@@ -174,7 +177,9 @@
                     String destino = v.getDestino();
                     String fechaC = v.getFecha();
                     //LocalDateTime fechaC = v.getFecha();
-                    double precio = v.getPrecio();
+
+                    double precioP = v.getPrecio();
+                    String precio = precioP + " €";
         %>
         <section id="dataWrapper" >            
             <div id="elements">
@@ -185,7 +190,7 @@
                     <tr>                        
                         <th>Origen</th>
                         <th>Destino</th>
-                        <th>Fecha </th>                          
+                        <th>Fecha Viaje</th>                          
                         <th>Precio </th>
                     </tr>
                     <tr>                       
@@ -284,7 +289,9 @@
                     String origen = v.getOrigen();
                     String destino = v.getDestino();
                     String fechaC = v.getFecha();
-                    double precio = v.getPrecio();
+
+                    double precioP = v.getPrecio();
+                    String precio = precioP + " €";
         %>
 
         <section id="dataWrapper" >            
@@ -296,7 +303,7 @@
                     <tr>                        
                         <th>Origen</th>
                         <th>Destino</th>
-                        <th>Fecha </th>                          
+                        <th>Fecha Viaje</th>                          
                         <th>Precio </th>
                     </tr>
                     <tr>                       

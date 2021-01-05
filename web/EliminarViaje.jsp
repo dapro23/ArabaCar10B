@@ -81,9 +81,9 @@
 
 
     %>
-    
+
     <script>
-        function checkIt(id) {            
+        function checkIt(id) {
             if (confirm('Eliminar Viaje con Id: ' + id)) {
                 return true;
             } else {
@@ -104,7 +104,11 @@
         <header>
             <div class="container">
                 <div id="branding">
-                    <h1> <span class="highlight">ArabaCar</span> Eliminar Viaje</h1>
+                    <li>
+                        <h1> <span class="highlight">ArabaCar</span> Eliminar Viaje</h1>
+                    <li><h1 id = "usuario" style="padding: 10px"> <%=n%> </h1></li> 
+                    <img src="data:image/png;base64,<%= imgDataBase64%>" class ="imgProfile" id="foto">
+                    </li>                    
                 </div>
                 <nav>
                     <ul>
@@ -115,7 +119,7 @@
         </header>
 
         <section id="form-box">
-            <b><%=n%>, a continuacion saldran todos los viajes que tienes pendientes de hacer</b>
+            <b><%=n%>, a continuacion saldran todos los viajes que tienes pendientes de hacer, puedes eliminar el que queiras.</b>
         </section>
 
         <section id="dataWrapper" >
@@ -126,8 +130,8 @@
                         <tr>                            
                             <th>Origen</th>
                             <th>Destino</th>
-                            <th>Fecha</th>                             
-                            <th>Precio </th>
+                            <th>Fecha Viaje</th>                             
+                            <th>Precio</th>
                             <th>Apuntados</th>
 
                         </tr>
@@ -144,7 +148,11 @@
                                 String destino = v.getDestino();
                                 //LocalDateTime fecha = v.getFecha();
                                 String fecha = v.getFecha();
-                                double precio = v.getPrecio();
+                                
+                                
+                                double precioP = v.getPrecio();
+                                String precio = precioP + " €";
+                                    
                                 String boton = "<form action='EliminarViaje' onsubmit='{return checkIt(" + id + ");}'>"
                                         + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "'>Eliminar</Button>"
                                         + "</form>";

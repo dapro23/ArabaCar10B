@@ -19,20 +19,28 @@
 <!DOCTYPE html>
 <html>
     <%
+        
+        HttpSession s = request.getSession();
 
-        if (request.getSession().getAttribute("email") == null) {
+        if (s.getAttribute("email") == null ) {
 
             out.println("<script>");
             out.println("window.onload = function (){    limpiar();};function limpiar() {    $('div').remove('#0');    $('div').remove('#5');    $('div').remove('#6');}");
             out.println("</script>");
+            
+            System.out.println(request.getSession().getAttribute("coche") + "<=coche 1");
 
-        } else if (request.getSession().getAttribute("coche") == null) {
+        } else if (s.getAttribute("coche") == null ) {
+            
+            System.out.println(request.getSession().getAttribute("coche") + "<=coche 2");
 
             out.println("<script>");
             out.println("window.onload = function (){    limpiar();    };function limpiar() {          $('a').remove('#1_1');    $('a').remove('#1_2');   $('a').remove('#1_3');    $('a').remove('#4');          $('div').remove('#5');          $('h1').remove('#7');}");
             out.println("</script>");
 
-        } else if (request.getSession().getAttribute("email") != null) {
+        } else if (s.getAttribute("coche") != null) {
+            
+            System.out.println(request.getSession().getAttribute("coche") + "<=coche 3");
 
             out.println("<script>");
             out.println("window.onload = function (){    limpiar();    };function limpiar() {    $('a').remove('#4');    $('h1').remove('#7');}");
@@ -63,8 +71,7 @@
 
             System.out.println("Iniciando el JSP");
             conn = BD.getConexion();
-
-            HttpSession s = request.getSession();
+            
             String e = (String) s.getAttribute("email");
 
             if (s.getAttribute("email") != null) {

@@ -108,7 +108,7 @@ public class RegistrarUsuario extends HttpServlet {
                 int num = pst.executeUpdate();
 
                 if (num != 0) {
-                    request.setAttribute("Aviso", "Usuario agregado correctamente");
+                    request.setAttribute("AvisoUsuario", "Usuario agregado correctamente");
                 }
 
             } catch (SQLException ex) {

@@ -228,7 +228,8 @@
                                     String movil = v.getMovil();
                                     String coche = v.getCoche();
                                     
-                                    double precio = v.getPrecio();
+                                    double precioP = v.getPrecio();
+                                    String precio = precioP + " €";
                                     String boton = "<form action='RealizarReserva' onsubmit='{return checkIt(" + id + ");}'>"
                                             + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "' action='BuscarViajes'>apuntarse</Button>"
                                             + "</form>";
@@ -258,7 +259,8 @@
                             //System.out.println(DateTimeFormatter.ofPattern("dd/MM/yyyy").format(v.getFecha()) + " holaa");
                             String fecha = v.getFecha();
 
-                            double precio = v.getPrecio();
+                            double precioP = v.getPrecio();
+                            String precio = precioP + " €";
                             String boton = "<form action='RealizarReserva'>"
                                     + "<Button id = 'botondetalles' name = 'botondetalles' value='" + id + "' action='BuscarViajes'>apuntarse</Button>"                                    
                                     + "</form>";

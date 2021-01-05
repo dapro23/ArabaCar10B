@@ -77,7 +77,7 @@
 
                 <div class="formContent">
                     <label for="coche"> Coche </label>
-                    <input type="text" placeholder= "Marca y Modelo de Coche" id="coche" name = "coche" >
+                    <input type="text" placeholder= "Marca y Modelo de Coche" id="coche" name = "coche" pattern="[a-zA-Z1-9\s]{4,}">
                 </div>
 
                 <div class="formContent">
@@ -91,10 +91,24 @@
                 String usuario = (String) request.getAttribute("Aviso");
                 if (usuario == null) {
                     usuario = "";
+                }else if (usuario.equals("")) {
+                    usuario = "";
                 }
 
             %>
             <label name="AvisoFecha" style="color:#e8491d"> <%=usuario%> </label>
+            
+            <%
+                String usuarioExito = (String) request.getAttribute("AvisoUsuario");
+                if (usuarioExito == null) {
+                    usuarioExito = "";
+                } else if (usuarioExito.equals("")) {
+                    usuarioExito = "";
+                }
+
+            %>
+            <label name="AvisoFecha" style="color: white"> <%=usuarioExito%> </label>
+            
         </section>
 
     </body>
